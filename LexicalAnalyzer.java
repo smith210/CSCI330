@@ -5,6 +5,10 @@ import java.util.*;
 
 public class LexicalAnalyzer{
 	private static final int ATTRIBUTE_SYNTAX = 3;
+	private static final int NO_COMMAND = 0;	
+	private static final int RELATION_TYPE = 1;
+	private static final int INSERT_TYPE = 2;
+	private static final int PRINT_TYPE = 3;
 	
 	public static void run(String filename){
 		File contain = null;
@@ -16,12 +20,18 @@ public class LexicalAnalyzer{
 		}catch (Exception e){}  
 		
 		List<String> symbols = new ArrayList<String>();
+		
+		int commandType = NO_COMMAND;
+
 
 		boolean evalAttr = false;
+		boolean nameSet = false;
 		int sizeAttr = 0;
+		int commaCounter = 0;
 
 		while (line.hasNextLine()){
 			String currLine = line.nextLine();
+
 			if(!currLine.isEmpty()){			
 				char[] charList = currLine.toCharArray();
 				if(charList[0] != '#'){
@@ -49,7 +59,6 @@ public class LexicalAnalyzer{
 										inQuote = false;
 										endIndex = i+1;
 										key = currLine.substring(frontIndex+1, endIndex-1);
-										System.out.println(key);
 										frontIndex = endIndex;
 									}
 									break;
@@ -57,20 +66,7 @@ public class LexicalAnalyzer{
 								case ')':								
 								case ';':
 								case '*':
-									if(charList[i] == '('){
-										evalAttr = true;
-									}
-									if(charList[i] == ')'){
-										if(sizeAttr == ATTRIBUTE_SYNTAX){
-											sizeAttr = 0;
-										}else{
-											System.out.println("ERROR - num attributes given: " + sizeAttr);
-											System.exit(0);
-										}
-										evalAttr = false;
-									}
 									key = Character.toString(charList[i]);
-									System.out.println(key);
 									frontIndex++;
 									break;
 								case ',':
@@ -82,6 +78,7 @@ public class LexicalAnalyzer{
 											System.exit(0);
 										}
 									}
+									commaCounter++;
 									frontIndex++;
 									break;
 								case '>':
@@ -92,7 +89,6 @@ public class LexicalAnalyzer{
 										frontIndex = i;
 									}else{
 										key = Character.toString(charList[i]);
-										System.out.println(key);
 										frontIndex++;
 									}
 									break;
@@ -100,11 +96,9 @@ public class LexicalAnalyzer{
 									if(isEqualOr){
 										endIndex = i+1;
 										key = currLine.substring(frontIndex, endIndex);
-										System.out.println(key);
 										frontIndex = endIndex;
 									}else{
 										key = Character.toString(charList[i]);
-										System.out.println(key);
 										frontIndex++;
 									}
 									break;
@@ -121,13 +115,87 @@ public class LexicalAnalyzer{
 								if(!inQuote){
 									endIndex = i+1;
 									key = currLine.substring(frontIndex, endIndex);
-									System.out.println(key);
 									frontIndex = endIndex;
 								}
 							}
 						}
-						if(!key.isEmpty() && evalAttr && charList[i] != '('){
-							sizeAttr++;
+
+						if(!key.isEmpty()){
+							switch(key){
+								case "RELATION":
+									commandType = RELATION_TYPE;
+									break;
+								case "INSERT":
+									commandType = INSERT_TYPE;
+									break;
+								case "PRINT":
+									commandType = PRINT_TYPE;
+									break;
+								case "(":
+									evalAttr = true;
+									break;
+								case ")":
+									if(sizeAttr == ATTRIBUTE_SYNTAX){
+										sizeAttr = 0;
+									}else{
+										System.out.println("ERROR - num attributes given: " + sizeAttr);
+										System.exit(0);
+										}
+									evalAttr = false;
+									break;
+								case ";":
+									if(commandType == RELATION_TYPE){
+										commaCounter++;
+										System.out.print("Creating " + key + " with " + commaCounter + " attributes");
+									}else if(commandType == INSERT_TYPE){
+										//grab number of attributes
+										System.out.print("Insert Inputted");
+									}else if(commandType == PRINT_TYPE){
+										commaCounter++;
+										System.out.print("Printing " + commaCounter + " relations: " + key);
+									}else{
+										System.out.println("ERROR - didn't evaluate command");
+										System.exit(0);
+									}
+									System.out.println(".");
+									//reset for next command
+									commaCounter = 0;
+									nameSet = false;
+									commandType = NO_COMMAND;
+									break;
+								default:
+									if(commandType == RELATION_TYPE){								
+										if(!evalAttr){
+											RelationParser relation = new RelationParser(key);
+											System.out.println(relation.parseRelationName());	
+										}else{
+
+
+										}
+									}else if(commandType == INSERT_TYPE){
+										if(nameSet){
+											InsertParser insert = new InsertParser(key);
+											System.out.println(insert.parseRelationName());	
+											//count arguement counter
+										}else{
+											//look for relation											
+											nameSet = true;
+										}
+									}else if(commandType == PRINT_TYPE){
+										if(nameSet){
+											//someting
+										}else{
+											nameSet = true;
+										}
+									}else{
+										System.out.println("ERROR - no command specified");
+										System.exit(0);
+									}
+							}				
+							//System.out.println(commandType);			
+							if(evalAttr && charList[i] != '('){
+								sizeAttr++;
+							}
 						}
 					}
 				}

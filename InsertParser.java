@@ -2,9 +2,8 @@ public class InsertParser{
 	private String name;
 	private int attrNum;
 
-	InsertParser(String name, int attrNum){
+	InsertParser(String name){
 		this.name = name;
-		this.attrNum = attrNum;
 	}
 
 	public String parseRelationName(){

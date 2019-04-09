@@ -3,10 +3,9 @@ public class RelationParser{
 	private String name;
 	private int attrNum;
 
-	RelationParser(String name, int attrNum){
+	RelationParser(String name){
 		this.name = name;
-		this.attrNum = attrNum;
-		Attribute[] attr = new Attribute[attrNum];
+		attrNum = 0;
 	}
 
 	public String parseRelationName(){
