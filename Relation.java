@@ -13,8 +13,8 @@ public class Relation{
 		this.schema = schema;
 	}
 
-	public void setTuple(LinkedList<Tuple> tuples){
-		this.tuples = tuples;
+	public void insertTuple(Tuple tuple){
+		tuples.add(tuple);
 	}
 
 	public String parseRelationName(){
