@@ -3,10 +3,18 @@ import java.util.*;
 public class Tuple{
 	private LinkedList<AttributeValue> values;
 
+	Tuple(){
+		values = new LinkedList<AttributeValue>();
+	}
+
 	public void setTupleValues(LinkedList<AttributeValue> values){
 		this.values = values;
 	}
 	
+	public void add(AttributeValue value){
+		values.add(value);
+	}
+
 	public LinkedList<AttributeValue> parseTupleValues(){
 		return this.values;
 	}

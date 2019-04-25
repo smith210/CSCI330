@@ -5,6 +5,12 @@ public class Relation{
 	private LinkedList<Attribute> schema;
 	private LinkedList<Tuple> tuples;
 
+	Relation(){
+		this.name = "";
+		this.schema = new LinkedList<Attribute>();
+		this.tuples = new LinkedList<Tuple>();
+	}
+
 	public void setName(String name){
 		this.name = name;
 	}
