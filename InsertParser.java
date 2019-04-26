@@ -3,6 +3,7 @@ Name: Martin Smith
 CSCI 330 - Spring 2019
 File Name : InsertParser.java
 */
+import java.util.*;
 
 public class InsertParser{
 	private String name;
@@ -24,6 +25,26 @@ public class InsertParser{
 		boolean isEqualAttach = false;
 		boolean hitBreak = false;
 
+		Parser p = new Parser(command);
+		LinkedList<String> commands = p.parseCommandSet();
+		for(int i = 0; i < commands.size(); i++){
+			String currCommand = commands.get(i);
+
+			if(!nameSet){//set name of relation if not set
+				name = currCommand;
+				value.setValue(name);
+				nameSet = true;
+			}else{
+				if(!currCommand.equals(";")){
+					value.setName(currCommand);
+					t.add(value);
+					attrVar = attrVar + 1;
+				}
+			}
+		}
+		tuple = t;
+
+		/*
 		while(pointer != command.length()){
 
 			String symbol = "";
@@ -112,7 +133,7 @@ public class InsertParser{
 	tuple = t;
 	if(attrNum != -1){//if not invalid, count number of attributes
 		attrNum = attrVar;
-	}
+	}*/
 	}
 
 	public Tuple parseTuple(){

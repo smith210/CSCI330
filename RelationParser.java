@@ -23,10 +23,57 @@ public class RelationParser{
 		boolean isEqualAttach = false;
 		boolean hitBreak = false;
 		boolean hitComma = false;
+		boolean evalAttribute = false;
 		Relation relation = new Relation();
 		Attribute attribute = new Attribute();
 		LinkedList<Attribute> schema = new LinkedList<Attribute>();
 
+		Parser p = new Parser(command);
+		LinkedList<String> commands = p.parseCommandSet();
+		for(int i = 0; i < commands.size(); i++){
+			String currCommand = commands.get(i);
+			if(!nameSet){
+				name = currCommand;
+				relation.setName(name);
+				nameSet = true;
+			}else{
+				if(evalAttribute){
+
+					switch(schemaVal){
+						case 0:
+							attribute.setAttributeName(currCommand);
+							schemaVal++;
+							break;
+						case 1:
+							attribute.setDataType(currCommand);
+							schemaVal++;
+							break;
+						case 2:
+							attribute.setLength(Integer.parseInt(currCommand));
+							schemaVal++;
+							break;
+						case 3:
+							if(currCommand.equals(",")){
+								schema.add(attribute);
+								schemaVal = 0;
+							}else if(currCommand.equals(")")){
+								evalAttribute = false;							
+							}else{							
+								this.attrNum = -1;
+							}
+							break;
+						default:
+					}
+				}
+				if(currCommand.equals("(")){
+					evalAttribute = true;
+				}
+			}
+		}
+		relation.setSchema(schema);
+		this.relation = relation;
+		//System.exit(0);
+		/*
 		while(pointer != command.length()){
 
 			String symbol = "";
@@ -106,7 +153,7 @@ public class RelationParser{
 					frontIndex = endIndex;
 				}
 			}
-
+	
 			if(!symbol.isEmpty()){
 
 				if(!nameSet){//set name of relation if not set
@@ -140,6 +187,7 @@ public class RelationParser{
 	}
 	relation.setSchema(schema);
 	this.relation = relation;
+	*/
 	}
 
 	public String parseRelationName(){

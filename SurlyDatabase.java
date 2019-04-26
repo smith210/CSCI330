@@ -44,7 +44,6 @@ public class SurlyDatabase{
 	}
 
 	public void replace(Relation relation, int index){
-		relations.remove(index);
 		relations.add(index, relation);
 	}
 
