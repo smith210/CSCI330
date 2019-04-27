@@ -8,7 +8,9 @@ public class DestroyParser {
 		LinkedList<String> commands = p.parseCommandSet();
     for(int i = 0; i < commands.size(); i++){
       String currCommand = commands.get(i);
-      System.out.println(currCommand);
+      if(!currCommand.equals(";")){
+		relation = currCommand;
+	  }
     }
   }
 

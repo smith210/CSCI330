@@ -11,6 +11,20 @@ public class SurlyDatabase{
 
 	SurlyDatabase(){
 		relations = new LinkedList<Relation>();
+		Relation catalog = new Relation();
+		LinkedList<Attribute> catalogSchema = new LinkedList<Attribute>();
+		LinkedList<Tuple> catalogTuples = new LinkedList<Tuple>();
+		Attribute catalogAttr1 = new Attribute();
+		Attribute catalogAttr2 = new Attribute();
+		catalog.setName("CATALOG");
+		catalogAttr1.setAttributeName("RELATION");
+		catalogAttr1.setDataType("CHAR");
+		catalogAttr2.setAttributeName("ATTRIBUTES");
+		catalogAttr2.setDataType("NUM");
+		catalogSchema.add(catalogAttr1);
+		catalogSchema.add(catalogAttr2);
+		catalog.setSchema(catalogSchema);
+		relations.add(catalog);
 	}
 
 	public Relation getRelation(String name){
@@ -23,10 +37,16 @@ public class SurlyDatabase{
 				index++;
 			}
 		}catch(Exception e){
-			System.out.println("YA A BINCH " + e);
+			System.out.println(e);
 			System.exit(0);
 		}
 		return r;
+	}
+
+	public void destroyRelation(String name){
+		Relation r = getRelation("CATALOG");
+		r.deleteTuple(name);
+
 	}
 
 	public int getRelationIndex(String name){

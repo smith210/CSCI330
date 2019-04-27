@@ -8,7 +8,9 @@ public class DeleteParser {
     LinkedList<String> commands = p.parseCommandSet();
     for(int i = 0; i < commands.size(); i++){
       String currCommand = commands.get(i);
-
+	  if(!currCommand.equals(";")){
+		relation = currCommand;
+	  }
     }
   }
   public String parseRelationName() {

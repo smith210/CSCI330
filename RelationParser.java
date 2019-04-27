@@ -56,10 +56,12 @@ public class RelationParser{
 							if(currCommand.equals(",")){
 								schema.add(attribute);
 								attribute = new Attribute();
+								attrVar++;
 								schemaVal = 0;
 							}else if(currCommand.equals(")")){
 								schema.add(attribute);
 								attribute = new Attribute();
+								attrVar++;
 								evalAttribute = false;							
 							}else{							
 								this.attrNum = -1;
@@ -73,6 +75,7 @@ public class RelationParser{
 				}
 			}
 		}
+		attrNum = attrVar;
 		relation.setSchema(schema);
 		this.relation = relation;
 

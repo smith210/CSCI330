@@ -24,7 +24,20 @@ public class LexicalAnalyzer{
 		SurlyDatabase surly = new SurlyDatabase();
 		sendLine("", line, surly);
 	}
-	
+	public void updateCatalog(SurlyDatabase surly, Relation catalog, String name, int attr){
+			Tuple t = new Tuple();			
+			AttributeValue catalogRelation = new AttributeValue();	
+			AttributeValue catalogAttributes = new AttributeValue();			
+			catalogRelation.setValue("CATALOG");
+			catalogAttributes.setValue("CATALOG");
+			catalogRelation.setName(name);
+			catalogAttributes.setName(Integer.toString(attr));
+			t.add(catalogRelation);
+			t.add(catalogAttributes);
+			catalog.insertTuple(t);
+			surly.replace(catalog, 0);
+	}
+
 	public void sendLine(String command, Scanner s, SurlyDatabase database){
 		String currLine = "";		
 		if(s.hasNextLine()){			
@@ -62,6 +75,7 @@ public class LexicalAnalyzer{
 							if(rp.parseAttributeCount() != -1){
 								Relation r = rp.parseRelations();
 								database.add(r);
+								updateCatalog(database, database.getRelation("CATALOG"), rp.parseRelationName(), rp.parseAttributeCount());
 							}else{
 								System.out.println("ERROR - invalid syntax inputted");
 								System.exit(0);
@@ -69,30 +83,29 @@ public class LexicalAnalyzer{
 							break;
 						case "INSERT":
 							InsertParser ip = new InsertParser(inputCommand);
-							
 							if(ip.parseAttributeCount() != -1){
 
-								Relation re = database.getRelation(ip.parseRelationName());
+								Relation r = database.getRelation(ip.parseRelationName());
 								int index = database.getRelationIndex(ip.parseRelationName());
 								Tuple tp = ip.parseTuple();
-								re.insertTuple(tp);
-								database.replace(re, index);
+								r.insertTuple(tp);
+								database.replace(r, index);
 
 							}else{
 								System.out.println("ERROR - invalid syntax inputted");
 								System.exit(0);
 							}
 							break;
-						case "PRINT":
+						case "PRINT"://evaluate PRINT command
 							PrintParser pp = new PrintParser(inputCommand);
 							
 							String[] relationsToPrint = pp.parseRelationNames();
 							for(int i = 0; i < relationsToPrint.length; i++){
 
-								Relation re = database.getRelation(relationsToPrint[i]);
-								LinkedList<Tuple> tu = re.parseRelationTuples();
-								LinkedList<Attribute> sch = re.parseRelationSchema();
-								System.out.println(re.parseRelationName());
+								Relation r = database.getRelation(relationsToPrint[i]);
+								LinkedList<Tuple> tu = r.parseRelationTuples();
+								LinkedList<Attribute> sch = r.parseRelationSchema();
+								System.out.println(r.parseRelationName());
 								for(int j = 0; j < sch.size(); j++){
 									System.out.print("|  ");
 									System.out.print(sch.get(j).parseAttributeName());
@@ -110,8 +123,18 @@ public class LexicalAnalyzer{
 
 							break;
 						case "DELETE":
+							DeleteParser dlt = new DeleteParser(inputCommand);
+							String relationDLT = dlt.parseRelationName();
+							Relation r = database.getRelation(relationDLT);
+							r.deleteTuples();
+							
 							break;
 						case "DESTROY":
+							DestroyParser dst = new DestroyParser(inputCommand);
+							String relationDST = dst.parseRelationName();
+							int index = database.getRelationIndex(relationDST);
+							database.replace(new Relation(), index);
+							database.destroyRelation(relationDST);
 							break;
 						default://command is not recognized
 							
