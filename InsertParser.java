@@ -13,7 +13,7 @@ public class InsertParser{
 
 	InsertParser(String command){
 		//Relation relation = new Relation();
-		AttributeValue value = new AttributeValue();
+		//AttributeValue value = new AttributeValue();
 		Tuple t = new Tuple();
 		int pointer = 0;
 		int frontIndex = 0;
@@ -28,14 +28,16 @@ public class InsertParser{
 		Parser p = new Parser(command);
 		LinkedList<String> commands = p.parseCommandSet();
 		for(int i = 0; i < commands.size(); i++){
+			AttributeValue value = new AttributeValue();
 			String currCommand = commands.get(i);
 
 			if(!nameSet){//set name of relation if not set
 				name = currCommand;
-				value.setValue(name);
+				//value.setValue(name);
 				nameSet = true;
 			}else{
 				if(!currCommand.equals(";")){
+					value.setValue(name);
 					value.setName(currCommand);
 					t.add(value);
 					attrVar = attrVar + 1;

@@ -3,6 +3,7 @@ Name: Martin Smith
 CSCI 330 - Spring 2019
 File Name : PrintParser.java
 */
+import java.util.*;
 
 public class PrintParser{
 	private String[] information;
@@ -20,7 +21,24 @@ public class PrintParser{
 		boolean isEqualAttach = false;
 		boolean hitBreak = false;
 
-		while(pointer != command.length()){
+		Parser p = new Parser(command);
+		LinkedList<String> commands = p.parseCommandSet();
+		for(int i = 0; i < commands.size(); i++){
+			String currCommand = commands.get(i);
+
+			if(!currCommand.equals(",") && !currCommand.equals(";")){
+				String[] newInformation = new String[attrVar + 1];				
+				if(!information[0].isEmpty()){
+					for(int j = 0; j < attrVar; j++){
+						newInformation[j] = information[j];
+					}
+				}
+				newInformation[attrVar] = currCommand;
+				information = newInformation;
+				attrVar++;
+			}
+		}
+		/*while(pointer != command.length()){
 
 			String symbol = "";
 			char c = command.charAt(pointer);
@@ -101,7 +119,7 @@ public class PrintParser{
 
 			}
 			pointer++;
-		}
+		}*/
 
 	}
 	
