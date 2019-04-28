@@ -43,7 +43,12 @@ public class RelationParser{
 							schemaVal++;
 							break;
 						case 2:
+						try {
 							attribute.setLength(Integer.parseInt(currCommand));
+						}
+						catch(Exception e) {
+							attribute.setLength(-1);
+						}
 							schemaVal++;
 							break;
 						case 3:
