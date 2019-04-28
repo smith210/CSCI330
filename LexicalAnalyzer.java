@@ -209,7 +209,7 @@ public class LexicalAnalyzer{
 							break;
 
 
-						case "DELETE":
+						case "DELETE": // Deletes single relation one at a time
 							DeleteParser dlt = new DeleteParser(inputCommand);
 							String relationDLT = dlt.parseRelationName();
 							Relation r = database.getRelation(relationDLT);
@@ -222,7 +222,7 @@ public class LexicalAnalyzer{
 							break;
 
 
-						case "DESTROY":
+						case "DESTROY": // Destroys single relation one at a time
 							DestroyParser dst = new DestroyParser(inputCommand);
 							String relationDST = dst.parseRelationName();
 							database.destroyRelation(relationDST);
