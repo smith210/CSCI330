@@ -4,7 +4,6 @@ CSCI 330 - Spring 2019
 File Name : Relation.java
 */
 
-
 import java.util.*;
 
 public class Relation{
@@ -30,11 +29,11 @@ public class Relation{
 		tuples.add(tuple);
 	}
 
-	public void deleteTuples(){
+	public void deleteTuples(){ // for destruction of all tuples in a non-CATALOG relation
 		tuples = new LinkedList<Tuple>();
 	}
 
-	public void deleteTuple(String name){
+	public void deleteSingleTuple(String name){  // for destruction of a tuple in CATALOG
 		int tupleIndex = 0;
 		int attributeIndex = 0;
 		boolean isFound = false;
