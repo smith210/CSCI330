@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-public class LexicalAnalyzer{
+public class LexicalAnalyzer{ // the heart of our program
 
 	public void run(String filename){
 		File contain = null;
@@ -65,11 +65,11 @@ public class LexicalAnalyzer{
 				command = command.concat(currLine);
 				if(command.contains(";")){//end of command has been reached
 					String typeCommand = command.substring(0, command.indexOf(' '));
-					String inputCommand = command.substring(command.indexOf(' ') + 1,
-															command.indexOf(';') + 1);
+					String inputCommand = command.substring(command.indexOf(' ') + 1, command.indexOf(';') + 1);
 					String nextCommand = command.substring(command.indexOf(';') + 1);
-					switch(typeCommand){//send command to specified parser
 
+
+					switch(typeCommand){//send command to specified parser
 
 						case "RELATION":
 							RelationParser rp = new RelationParser(inputCommand);
@@ -79,17 +79,18 @@ public class LexicalAnalyzer{
 								if(search.parseRelationName().isEmpty()){
 									database.add(r);
 									updateCatalog(database, database.getRelation("CATALOG"), rp.parseRelationName(), rp.parseAttributeCount());
-								}else{
+								}
+								else{
 									System.out.println("Relation " + r.parseRelationName() + " already exists within CATALOG.\n");
 								}
 							}else{
-								System.out.println("ERROR - invalid syntax inputted");
+								System.out.println("ERROR - invalid syntax.");
 								System.exit(0);
 							}
 							break;
 
 
-						case "INSERT":
+						case "INSERT": // checks several potential errors below
 							InsertParser ip = new InsertParser(inputCommand);
 							if(ip.parseAttributeCount() != -1){
 								Relation r = database.getRelation(ip.parseRelationName());
@@ -99,8 +100,8 @@ public class LexicalAnalyzer{
 											Tuple tp = ip.parseTuple();
 											for (int x = 0; x < tp.parseTupleValues().size(); x++) {
 												String type = r.parseRelationSchema().get(x).parseAttributeType();
-												int constrict = r.parseRelationSchema().get(x).parseAttributeLength();
-												if(constrict >= tp.parseTupleValues().get(x).parseAttName().length()){
+												int trueLength = r.parseRelationSchema().get(x).parseAttributeLength();
+												if(trueLength >= tp.parseTupleValues().get(x).parseAttName().length()){
 													canAddTuple = true;
 													if (type.equals("NUM")) {
 														for(int y = 0; y < tp.parseTupleValues().get(x).parseAttName().length(); y++) {
@@ -133,13 +134,13 @@ public class LexicalAnalyzer{
 									}
 
 							}else{
-								System.out.println("ERROR - invalid syntax inputted");
+								System.out.println("ERROR - invalid syntax.");
 								System.exit(0);
 							}
 							break;
 
 
-						case "PRINT"://evaluate PRINT command
+						case "PRINT": // prints in format as assignment indicates
 							PrintParser pp = new PrintParser(inputCommand);
 							String[] relationsToPrint = pp.parseRelationNames();
 							for(int i = 0; i < relationsToPrint.length; i++){
@@ -150,12 +151,12 @@ public class LexicalAnalyzer{
 									  System.out.println("Relation " + pp.parseRelationNames()[i] + " doesn't exist within CATALOG.\n");
 										break;
 								}
-								int longestTuple = longestTuple(tu, sch);
 								int count = 0;
+								int longestTuple = longestTuple(tu, sch); // see bottom of file
 								System.out.print(" ");
 								for (int x = 0; x < ((longestTuple+6)*sch.size()); x++) {
 									System.out.print("*");
-									count++;
+									count++; // establishes length of asterisks and dashes, depending on length of longest tuple
 								}
 								System.out.println(" ");
 								System.out.print(" | " + r.parseRelationName());
@@ -171,7 +172,7 @@ public class LexicalAnalyzer{
 									int length1 = 0;
 									System.out.print(" " + sch.get(j).parseAttributeName() + " ");
 									while (length1 + sch.get(j).parseAttributeName().length() < (longestTuple + 2)) {
-										if (length1 + sch.get(j).parseAttributeName().length() == longestTuple+1) {
+										if (length1 + sch.get(j).parseAttributeName().length() == longestTuple + 1) {
 											System.out.print(" |");
 										}
 											System.out.print(" ");
@@ -249,6 +250,7 @@ public class LexicalAnalyzer{
 		}
 
 	}
+
 	public int longestTuple(LinkedList<Tuple> group1, LinkedList<Attribute> group2) {
     int length = 1;
 		for(int k = 0; k < group1.size(); k++) {
@@ -266,5 +268,6 @@ public class LexicalAnalyzer{
 		}
 		return length;
 	}
-
 }
+
+// END
