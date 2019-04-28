@@ -4,7 +4,6 @@ CSCI 330 - Spring 2019
 File Name : AttributeValue.java
 */
 
-
 public class AttributeValue{
 	private String name;
 	private String value;
