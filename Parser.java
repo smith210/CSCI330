@@ -1,3 +1,9 @@
+/*
+Name: Martin Smith, Eric Anderson
+CSCI 330 - Spring 2019
+File Name : Parser.java
+*/
+
 import java.util.*;
 
 public class Parser{
@@ -5,13 +11,13 @@ public class Parser{
 
 	Parser(String command){
 		commandSet = new LinkedList<String>();
-		String str = "";		
+		String str = "";
 		int index = 0;
 		if(isBreak(command.charAt(index))){
 			breakCharState(command, index);
 		}else{
 			symbolState(command, str, index, false);
-		}	
+		}
 	}
 
 	private void breakCharState(String command, int index){
@@ -73,13 +79,13 @@ public class Parser{
 				return true;
 			default:
 				return false;
-		}	
+		}
 	}
 
 	public LinkedList<String> parseCommandSet(){
 		return this.commandSet;
 	}
 
-	
+
 
 }
