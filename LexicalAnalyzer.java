@@ -14,20 +14,20 @@ public class LexicalAnalyzer{
 		File contain = null;
 		Scanner line = null;
 
-		try { 
+		try {
 			contain = new File (filename);
 			line = new Scanner (contain);
 		}catch (Exception e){
 			System.out.println("ERROR - no such file: " + filename);
 			System.exit(0);
-		}  
+		}
 		SurlyDatabase surly = new SurlyDatabase();
 		sendLine("", line, surly);
 	}
 	public void updateCatalog(SurlyDatabase surly, Relation catalog, String name, int attr){
-			Tuple t = new Tuple();			
-			AttributeValue catalogRelation = new AttributeValue();	
-			AttributeValue catalogAttributes = new AttributeValue();			
+			Tuple t = new Tuple();
+			AttributeValue catalogRelation = new AttributeValue();
+			AttributeValue catalogAttributes = new AttributeValue();
 			catalogRelation.setValue("CATALOG");
 			catalogAttributes.setValue("CATALOG");
 			catalogRelation.setName(name);
@@ -39,8 +39,8 @@ public class LexicalAnalyzer{
 	}
 
 	public void sendLine(String command, Scanner s, SurlyDatabase database){
-		String currLine = "";		
-		if(s.hasNextLine()){			
+		String currLine = "";
+		if(s.hasNextLine()){
 			currLine = s.nextLine();
 		}else{
 			return;
@@ -61,9 +61,9 @@ public class LexicalAnalyzer{
 					currLine = currLine.substring(pointer);
 				}
 			}
-					
+
 			if(currLine.charAt(0) != '#'){//do not parse comments
-				command = command.concat(currLine);				
+				command = command.concat(currLine);
 				if(command.contains(";")){//end of command has been reached
 					String typeCommand = command.substring(0, command.indexOf(' '));
 					String inputCommand = command.substring(command.indexOf(' ') + 1,
@@ -98,27 +98,46 @@ public class LexicalAnalyzer{
 							break;
 						case "PRINT"://evaluate PRINT command
 							PrintParser pp = new PrintParser(inputCommand);
-							
+
 							String[] relationsToPrint = pp.parseRelationNames();
 							for(int i = 0; i < relationsToPrint.length; i++){
 
 								Relation r = database.getRelation(relationsToPrint[i]);
 								LinkedList<Tuple> tu = r.parseRelationTuples();
 								LinkedList<Attribute> sch = r.parseRelationSchema();
-								System.out.println(r.parseRelationName());
+								System.out.print(" ******************************\n");
+								System.out.println(" | " + r.parseRelationName() + "                     |");
+								System.out.print(" ------------------------------\n");
+								System.out.print(" |");
 								for(int j = 0; j < sch.size(); j++){
-									System.out.print("|  ");
-									System.out.print(sch.get(j).parseAttributeName());
+									int length1 = 0;
+									System.out.print(" " + sch.get(j).parseAttributeName() + " ");
+									while (length1 + sch.get(j).parseAttributeName().length() < 11) {
+										if (length1 + sch.get(j).parseAttributeName().length() == 10) {
+											System.out.print(" |");
+										}
+											System.out.print(" ");
+											length1++;
+									}
 								}
-								System.out.println("   |");
+								System.out.println("|");
 								for(int k = 0; k < tu.size(); k++){
-									System.out.print("|  ");
+									System.out.print(" |");
 									LinkedList<AttributeValue> temp = tu.get(k).parseTupleValues();
 									for(int l = 0; l < temp.size(); l++){
-										System.out.print(temp.get(l).parseAttName() + "  |");
+										int length2 = 0;
+										System.out.print(" " + temp.get(l).parseAttName());
+										while (length2 + temp.get(l).parseAttName().length() < 13) {
+											  if (length2 + temp.get(l).parseAttName().length() == 12) {
+													System.out.print("|");
+												}
+												System.out.print(" ");
+												length2++;
+										}
 									}
 									System.out.println(" ");
 								}
+								System.out.println(" ******************************\n");
 							}
 
 							break;
@@ -127,7 +146,7 @@ public class LexicalAnalyzer{
 							String relationDLT = dlt.parseRelationName();
 							Relation r = database.getRelation(relationDLT);
 							r.deleteTuples();
-							
+
 							break;
 						case "DESTROY":
 							DestroyParser dst = new DestroyParser(inputCommand);
@@ -137,11 +156,11 @@ public class LexicalAnalyzer{
 							database.destroyRelation(relationDST);
 							break;
 						default://command is not recognized
-							
+
 					}
 					//remove excess space from nextCommand
 					int linePointer = 0;
-					while(linePointer != currLine.length() && 
+					while(linePointer != currLine.length() &&
 						  Character.isWhitespace(currLine.charAt(linePointer))){
 						linePointer++;
 					}
