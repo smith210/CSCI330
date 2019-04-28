@@ -12,6 +12,8 @@ public class SurlyDatabase{
 	SurlyDatabase(){
 		relations = new LinkedList<Relation>();
 		Relation catalog = new Relation();
+
+		// create independent CATALOG
 		LinkedList<Attribute> catalogSchema = new LinkedList<Attribute>();
 		LinkedList<Tuple> catalogTuples = new LinkedList<Tuple>();
 		Attribute catalogAttr1 = new Attribute();
@@ -30,13 +32,13 @@ public class SurlyDatabase{
 	public Relation getRelation(String name){
 		Relation r = relations.getFirst();
 		int index = 1;
-
 		try{
 			while(!(r.parseRelationName()).equals(name)){
 				r = relations.get(index);
 				index++;
 			}
-		}catch(Exception e){
+		}
+		catch(Exception e){
 				r = new Relation();
 		}
 		return r;
@@ -46,7 +48,7 @@ public class SurlyDatabase{
 		if(!name.equals("CATALOG") && !getRelation(name).parseRelationName().isEmpty()){
 			relations.remove(getRelation(name));
 			Relation catalog = getRelation("CATALOG");
-			catalog.deleteTuple(name);
+			catalog.deleteSingleTuple(name);
 		}
 		else {
 			System.out.println("Cannot destroy " + name + "!");
