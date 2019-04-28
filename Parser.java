@@ -11,12 +11,10 @@ public class Parser{
 
 	Parser(String command){
 		commandSet = new LinkedList<String>();
-		String str = "";
-		int index = 0;
-		if(isBreak(command.charAt(index))){
-			breakCharState(command, index);
+		if(isBreak(command.charAt(0))){
+			breakCharState(command, 0);
 		}else{
-			symbolState(command, str, index, false);
+			symbolState(command, "", 0, false);
 		}
 	}
 
