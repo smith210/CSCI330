@@ -1,3 +1,10 @@
+/*
+Name: Martin Smith, Eric Anderson
+CSCI 330 - Spring 2019
+File Name : Relation.java
+*/
+
+
 import java.util.*;
 
 public class Relation{
@@ -22,14 +29,14 @@ public class Relation{
 	public void insertTuple(Tuple tuple){
 		tuples.add(tuple);
 	}
-	
+
 	public void deleteTuples(){
 		tuples = new LinkedList<Tuple>();
 	}
 
 	public void deleteTuple(String name){
 		int tupleIndex = 0;
-		int attributeIndex = 0;		
+		int attributeIndex = 0;
 		boolean isFound = false;
 		try{
 			while(tupleIndex != tuples.size()){
@@ -46,7 +53,6 @@ public class Relation{
 				}
 				tupleIndex++;
 			}
-			System.out.println("ALS");
 			tuples.remove(tuples.get(tupleIndex));
 
 		}catch(Exception e){
@@ -54,7 +60,7 @@ public class Relation{
 			System.exit(0);
 		}
 	}
-	
+
 	public String parseRelationName(){
 		return this.name;
 	}
@@ -67,4 +73,3 @@ public class Relation{
 		return this.tuples;
 	}
 }
-
