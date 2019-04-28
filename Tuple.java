@@ -1,3 +1,9 @@
+/*
+Name: Martin Smith, Eric Anderson
+CSCI 330 - Spring 2019
+File Name : Tuple.java
+*/
+
 import java.util.*;
 
 public class Tuple{
@@ -10,7 +16,7 @@ public class Tuple{
 	public void setTupleValues(LinkedList<AttributeValue> values){
 		this.values = values;
 	}
-	
+
 	public void add(AttributeValue value){
 		values.add(value);
 	}
@@ -35,4 +41,3 @@ public class Tuple{
 		return retVal;
 	}
 }
-
