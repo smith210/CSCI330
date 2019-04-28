@@ -3,6 +3,7 @@ Name: Martin Smith, Eric Anderson
 CSCI 330 - Spring 2019
 File Name : PrintParser.java
 */
+
 import java.util.*;
 
 public class PrintParser{
@@ -13,7 +14,6 @@ public class PrintParser{
 		information[0] = "";
 		int pointer = 0;
 		int attrVar = 0;
-		boolean nameSet = false;
 
 		Parser p = new Parser(command);
 		LinkedList<String> commands = p.parseCommandSet();
