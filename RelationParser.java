@@ -1,8 +1,9 @@
 /*
-Name: Martin Smith
+Name: Martin Smith, Eric Anderson
 CSCI 330 - Spring 2019
 File Name : RelationParser.java
 */
+
 import java.util.*;
 
 public class RelationParser{
@@ -11,17 +12,10 @@ public class RelationParser{
 	private int attrNum;
 	private Relation relation;
 
-	RelationParser(String command){	
-		int pointer = 0;
-		int frontIndex = 0;
-		int endIndex = 0;
+	RelationParser(String command){
 		int attrVar = 0;
 		int schemaVal = 0;
 		boolean nameSet = false;
-		boolean inQuote = false;
-		boolean isValidParentheses = false;
-		boolean isEqualAttach = false;
-		boolean hitBreak = false;
 		boolean hitComma = false;
 		boolean evalAttribute = false;
 		Relation relation = new Relation();
@@ -62,8 +56,8 @@ public class RelationParser{
 								schema.add(attribute);
 								attribute = new Attribute();
 								attrVar++;
-								evalAttribute = false;							
-							}else{							
+								evalAttribute = false;
+							}else{
 								this.attrNum = -1;
 							}
 							break;
