@@ -1,3 +1,9 @@
+/*
+Name: Martin Smith, Eric Anderson
+CSCI 330 - Spring 2019
+File Name : Attribute.java
+*/
+
 public class Attribute{
 	private String name;
 	private String dataType;
@@ -9,12 +15,12 @@ public class Attribute{
 
 	public void setDataType(String dataType){
 		this.dataType = dataType;
-	}	
+	}
 
 	public void setLength(int length){
 		this.length = length;
 	}
-	
+
 	public String parseAttributeName(){
 		return this.name;
 	}
@@ -27,4 +33,3 @@ public class Attribute{
 		return this.length;
 	}
 }
-
