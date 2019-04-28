@@ -16,7 +16,6 @@ public class RelationParser{
 		int attrVar = 0;
 		int schemaVal = 0;
 		boolean nameSet = false;
-		boolean hitComma = false;
 		boolean evalAttribute = false;
 		Relation relation = new Relation();
 		Attribute attribute = new Attribute();
