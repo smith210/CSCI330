@@ -1,5 +1,5 @@
 /*
-Name: Martin Smith
+Name: Martin Smith, Eric Anderson
 CSCI 330 - Spring 2019
 File Name : SurlyDatabase.java
 */
@@ -30,47 +30,31 @@ public class SurlyDatabase{
 	public Relation getRelation(String name){
 		Relation r = relations.getFirst();
 		int index = 1;
-		
+
 		try{
 			while(!(r.parseRelationName()).equals(name)){
 				r = relations.get(index);
 				index++;
 			}
 		}catch(Exception e){
-			System.out.println(e);
-			System.exit(0);
+				r = new Relation();
 		}
 		return r;
 	}
 
 	public void destroyRelation(String name){
-		Relation r = getRelation("CATALOG");
-		r.deleteTuple(name);
-
-	}
-
-	public int getRelationIndex(String name){
-		int index = 0;
-		Relation r = relations.get(index);
-		try{
-			while(!(r.parseRelationName()).equals(name)){
-				r = relations.get(index);
-				index++;
-			}
-		}catch(Exception e){
-			index = -1;
+		if(!name.equals("CATALOG") && !getRelation(name).parseRelationName().isEmpty()){
+			relations.remove(getRelation(name));
+			Relation catalog = getRelation("CATALOG");
+			catalog.deleteTuple(name);
 		}
-		return index;
-	}
-
-	public void replace(Relation relation, int index){
-		relations.add(index, relation);
+		else {
+			System.out.println("Cannot destroy " + name + "!");
+		}
 	}
 
 	public void add(Relation relation){
-		
 		relations.add(relation);
-
 	}
-	
+
 }
