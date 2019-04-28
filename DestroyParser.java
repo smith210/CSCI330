@@ -4,7 +4,6 @@ CSCI 330 - Spring 2019
 File Name : DestroyParser.java
 */
 
-
 import java.util.*;
 
 public class DestroyParser {
