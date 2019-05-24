@@ -64,14 +64,47 @@ public class LexicalAnalyzer{
 				}
 				break;
 			case "INSERT"://parse Insert commands
+				InsertParser ip = new InsertParser(inputCommand);
+				if(ip.parseAttributeCount() != -1){
+
+				}
 				break;
 			case "PRINT"://evaluate PRINT command
 				break;
 			case "DELETE": // Deletes relations
+				DeleteParser dlt = new DeleteParser(parser);
+				LinkedList<String> relations = dlt.parseCommands();
+				String relationDLT = dlt.parseRelationName();
+				Relation r = database.getRelation(relationDLT);
+				if(!r.parseRelationName().isEmpty()){//make sure not empty
+					if(!dlt.hasWhere()){								
+						r.deleteTuples();
+					}
+					else {//specialized delete statement
+						
+					}
+			 	}
 				break;
 			case "DESTROY": // Destroys single relation one at a time
+				DestroyParser dst = new DestroyParser(parser);
+				String relationDST = dst.parseRelationName();
+				surly.destroyRelation(relationDST);
 				break;
-			default: // When setting value to not a value
+			default: // Deal with temporary relations
+				if(parser.hasEqual()){ //valid temporary relation
+					System.out.println(parser.getSecondaryName());
+					switch(parser.getSecondaryName()){
+						case "SELECT":
+							break;
+						case "PROJECT":
+							break;
+						case "JOIN":
+							break;
+						default://not valid temporary syntax
+				
+					}
+				
+				}
 
 		}
 

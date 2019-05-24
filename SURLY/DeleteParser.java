@@ -8,13 +8,19 @@ File Name : DeleteParser.java
 import java.util.*;
 
 public class DeleteParser {
-  private LinkedList<String> commands;
+	private Parser parser;
+  	private LinkedList<String> commands;
 
-  DeleteParser(String input) {
-    Parser p = new Parser(input);
-    commands = p.parseCommandSet();
+	 DeleteParser(String input) {
+		Parser p = new Parser(input);
+	 	commands = p.parseCommandSet();
 
-  }
+	 }
+
+	DeleteParser(Parser command){
+		parser = command;
+		commands = parser.parseCommandSet();
+	}
 
 	public boolean hasWhere(){
 		boolean hasWhere = false;

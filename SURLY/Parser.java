@@ -84,6 +84,14 @@ public class Parser{
 		return catalogPresent;
 	}
 	
+	public boolean hasEqual(){
+		return commandSet.get(1).isEqual("=");
+	}
+
+	public String getSecondaryName(){
+		return commandSet.get(2);
+	}
+
 	public String getRelationName(){
 		return commandSet.get(0);
 	}
