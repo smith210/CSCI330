@@ -8,20 +8,28 @@ File Name : DestroyParser.java
 import java.util.*;
 
 public class DestroyParser {
-  private String relation;
+  	private String relation;
+	
+	DestroyParser(Parser p){
+		getInfo(p);
+	}
 
-  DestroyParser(String input) {
-    Parser p = new Parser(input);
+	DestroyParser(String input) {
+		Parser p = new Parser(input);
+		getInfo(p);
+	}
+
+	private void getInfo(Parser p){
 		LinkedList<String> commands = p.parseCommandSet();
-    for(int i = 0; i < commands.size(); i++){
-      String currCommand = commands.get(i);
-      if(!currCommand.equals(";")){
-		relation = currCommand;
-	  }
-    }
-  }
+		for(int i = 1; i < commands.size(); i++){
+		  String currCommand = commands.get(i);
+		  if(!currCommand.equals(";")){
+			relation = currCommand;
+		  }
+		}
+	}
 
-  public String parseRelationName() {
-    return this.relation;
-  }
+	public String parseRelationName() {
+		return this.relation;
+	}
 }

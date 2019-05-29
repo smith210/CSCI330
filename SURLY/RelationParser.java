@@ -67,6 +67,7 @@ public class RelationParser{
 						}
 						catch(Exception e) {
 							attribute.setLength(-1);
+							attrNum = -1;
 						}
 							schemaVal++;
 							break;

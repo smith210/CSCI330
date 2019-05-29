@@ -53,7 +53,7 @@ public class DeleteParser {
 	}
 
 	public String parseRelationName() {
-		return commands.get(0);
+		return commands.get(1);
 	}
 
   public LinkedList<String> parseCommands() {

@@ -20,6 +20,7 @@ public class SurlyDatabase{
 		catalog.setName("CATALOG");
 		catalogAttr1.setAttributeName("RELATION");
 		catalogAttr1.setDataType("CHAR");
+		catalogAttr1.setLength(30);
 		catalogAttr2.setAttributeName("ATTRIBUTES");
 		catalogAttr2.setDataType("NUM");
 		catalogSchema.add(catalogAttr1);

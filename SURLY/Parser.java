@@ -85,7 +85,7 @@ public class Parser{
 	}
 	
 	public boolean hasEqual(){
-		return commandSet.get(1).isEqual("=");
+		return commandSet.get(1).equals("=");
 	}
 
 	public String getSecondaryName(){
