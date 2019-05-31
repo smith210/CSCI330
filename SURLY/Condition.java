@@ -20,7 +20,7 @@ public class Condition{
 	public String returnEvaluator(){return conditionEval; }
 
 	public boolean syntaxValid(){
-		if(left.length() == 0 && conditionEval.length() == 0 && right.length() == 0){
+		if(left.length() != 0 && conditionEval.length() != 0 && right.length() != 0){
 			return true;
 		}else{
 			return false;

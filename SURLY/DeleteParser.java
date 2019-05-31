@@ -53,13 +53,14 @@ public class DeleteParser {
 	}
 
 	private void createCases(){
+		parser.printContent();
 		if(hasWhere()){
 			int start = commands.indexOf("WHERE");
 			Condition c = new Condition();
 			ConditionList curr = new ConditionList();
 			int cPtr = 0;
 			for(int i = start; i < commands.size(); i++){
-				switch(commands.get(start)){
+				switch(commands.get(i)){
 					case "and":
 						if(c.syntaxValid()){
 							curr.add(c);
@@ -72,14 +73,22 @@ public class DeleteParser {
 							curr = new ConditionList();
 						}
 						break;
+					case ";":
+						if(c.syntaxValid()){
+							curr.add(c);
+						}
+						break;
 					default://set up condition
-						if(cPtr == 0){
-							c.setLeft(commands.get(start));
-						}else if(cPtr == 1){
-							c.setEvaluator(commands.get(start));
+						if(cPtr == 1){
+							System.out.println("LEFT: " + commands.get(i));
+							c.setLeft(commands.get(i));
 						}else if(cPtr == 2){
-							c.setRight(commands.get(start));
-							cPtr = -1;
+							System.out.println("MIDDLE: " + commands.get(i));
+							c.setEvaluator(commands.get(i));
+						}else if(cPtr == 3){
+							System.out.println("RIGHT: " + commands.get(i));
+							c.setRight(commands.get(i));
+							cPtr = 0;
 						}else{//error
 
 						}
@@ -96,6 +105,7 @@ public class DeleteParser {
 	public String parseRelationName() {
 		return commands.get(1);
 	}
+ 
 
   public LinkedList<String> parseCommands() {
     return commands;
