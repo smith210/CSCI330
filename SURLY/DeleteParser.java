@@ -9,7 +9,7 @@ import java.util.*;
 
 public class DeleteParser {
 	private Parser parser;
-  	private LinkedList<String> commands;
+  private LinkedList<String> commands;
 	private LinkedList<ConditionList> conditions;
 
 	 DeleteParser(String input) {
@@ -28,16 +28,16 @@ public class DeleteParser {
 	/*private Conditions createCond(int index){
 		switch(index){
 			case 0://left
-				
+
 				break;
 			case 1://evaluator
-				
+
 				break;
 			case 2://right
 
 				break;
 			default:
-				
+
 		}
 
 	}*/
@@ -52,7 +52,7 @@ public class DeleteParser {
 		return hasWhere;
 	}
 
-	private void createCases(){		
+	private void createCases(){
 		if(hasWhere()){
 			int start = commands.indexOf("WHERE");
 			Condition c = new Condition();
@@ -86,7 +86,7 @@ public class DeleteParser {
 						cPtr++;
 				}
 
-			} 
+			}
 		}
 
 	}
