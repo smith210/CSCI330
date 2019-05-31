@@ -73,7 +73,7 @@ public class LexicalAnalyzer{
 								ip.implementSize(x, r.parseRelationSchema().get(x).parseAttributeLength());
 							}
 							r.insertTuple(ip.parseTuple());
-							
+
 						}
 					}
 				}
@@ -95,18 +95,22 @@ public class LexicalAnalyzer{
 				LinkedList<String> relations = dlt.parseCommands();
 				String relationDLT = dlt.parseRelationName();
 				Relation r = surly.getRelation(relationDLT);
+
+				LinkedList<Tuple> empty = new LinkedList<Tuple>();
+				ConditionList conditionList = new ConditionList();
+				conditionList.retrieveList();
+
 				if(!r.parseRelationName().isEmpty()){//make sure not empty
-					if(!dlt.hasWhere()){								
-						r.deleteTuples();
+					if(!dlt.hasWhere()){
+						r.deleteTuples(empty);
 					}
 					else {//specialized delete statement
-						
-						LinkedList<ConditionList> conditions = dlt.getConditions();
-						for(int i = 0; i < conditions.size(); i++){
-							ConditionList curr = conditions.get(i);
-
-						}
-						
+						r.deleteTuples(conditionList.evalAllConds(r, command));
+					//	LinkedList<ConditionList> conditions = dlt.getConditions();
+					//	for(int i = 0; i < conditions.size(); i++){
+					//		ConditionList curr = conditions.get(i);
+          //
+					//	}
 					}
 			 	}
 				break;
@@ -136,9 +140,9 @@ public class LexicalAnalyzer{
 							}
 							break;
 						default://not valid temporary syntax
-				
+
 					}
-				
+
 				}
 
 		}
