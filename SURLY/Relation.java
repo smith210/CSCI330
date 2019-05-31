@@ -30,8 +30,8 @@ public class Relation{
 		tuples.add(tuple);
 	}
 
-	public void deleteTuples(){
-		tuples = new LinkedList<Tuple>();
+	public void deleteTuples(LinkedList<Tuple> deletes){
+		tuples = deletes;
 	}
 
 	public void deleteTuple(String name){
@@ -70,10 +70,10 @@ public class Relation{
 	}
 
 	private int tableWidth(){
-		int width = 0;		
+		int width = 0;
 		for(int i = 0; i < schema.size(); i++){
 			width = width + getWidth(schema.get(i));
-		}	
+		}
 		return width + schema.size() + 1;
 	}
 
@@ -91,15 +91,15 @@ public class Relation{
 	}
 
 	private void displayTuple(Tuple curr){
-		LinkedList<AttributeValue> info = curr.parseTupleValues();	
+		LinkedList<AttributeValue> info = curr.parseTupleValues();
 		System.out.print("|");
 		for(int i = 0; i < info.size(); i++){
 			int max = getWidth(schema.get(i));
-			System.out.print(info.get(i).parseAttName());			
+			System.out.print(info.get(i).parseAttName());
 			printSpaces(max - info.get(i).parseAttName().length());
 			System.out.print("|");
 		}
-		
+
 	}
 
 	private void createBorder(){
@@ -130,15 +130,15 @@ public class Relation{
 	}
 
 	public int inSchema(String attName){
-		int i = 0;		
+		int i = 0;
 		while(i != schema.size() && !schema.get(i).parseAttributeName().equals(attName)){
 			i++;
 		}
-		if(i == schema.size()){ 
+		if(i == schema.size()){
 			return -1;
 		}else{
 			return i;
-		} 
+		}
 	}
 
 	public String parseRelationName(){
