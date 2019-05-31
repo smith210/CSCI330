@@ -61,10 +61,10 @@ public class InsertParser{
 
 	public void implementSize(int index, int attSize){
 		System.out.println(tuple.parseTupleValues().get(index).parseAttName());
-		//if(attSize < tuple.parseTupleValues().get(index).parseAttName().length()){
+		if(attSize < tuple.parseTupleValues().get(index).parseAttName().length()){
 
-			//tuple.parseTupleValues().get(index).setName(tuple.parseTupleValues().get(index).parseAttName().substring(0, attSize));
-		//}
+			tuple.parseTupleValues().get(index).setName(tuple.parseTupleValues().get(index).parseAttName().substring(0, attSize));
+		}
 
 	}
 
