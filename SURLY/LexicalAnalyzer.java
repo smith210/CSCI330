@@ -101,6 +101,12 @@ public class LexicalAnalyzer{
 					}
 					else {//specialized delete statement
 						
+						LinkedList<ConditionList> conditions = dlt.getConditions();
+						for(int i = 0; i < conditions.size(); i++){
+							ConditionList curr = conditions.get(i);
+
+						}
+						
 					}
 			 	}
 				break;
@@ -116,8 +122,18 @@ public class LexicalAnalyzer{
 						case "SELECT":
 							break;
 						case "PROJECT":
+							ProjectParser prj = new ProjectParser(parser);
+							if(prj.isValid()){
+
+
+							}
 							break;
 						case "JOIN":
+							JoinParser jPsr = new JoinParser(parser);
+							if(jPsr.isValid()){
+
+
+							}
 							break;
 						default://not valid temporary syntax
 				

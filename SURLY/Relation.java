@@ -129,6 +129,18 @@ public class Relation{
 
 	}
 
+	public int inSchema(String attName){
+		int i = 0;		
+		while(i != schema.size() && !schema.get(i).parseAttributeName().equals(attName)){
+			i++;
+		}
+		if(i == schema.size()){ 
+			return -1;
+		}else{
+			return i;
+		} 
+	}
+
 	public String parseRelationName(){
 		return this.name;
 	}
