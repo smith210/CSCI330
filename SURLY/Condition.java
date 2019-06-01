@@ -1,3 +1,9 @@
+/*
+Name: Martin Smith, Eric Anderson
+CSCI 330 - Spring 2019
+File Name : Condition.java
+*/
+
 import java.util.*;
 
 public class Condition{
@@ -37,8 +43,8 @@ public class Condition{
 
 	public LinkedList<Tuple> parseTuples(int index, LinkedList<Tuple> allTuples, LinkedList<Tuple> tupleRef, String command){
 		System.out.println(allTuples.size());
-	
-		
+
+
 	    LinkedList<Tuple> chosenOnes = new LinkedList<Tuple>();
 		//System.out.println(allTuples.size());
 		for(int i = 0; i < allTuples.size(); i++){
@@ -66,31 +72,31 @@ public class Condition{
 					}
 					break;
 				case "<":
-					if(Integer.parseInt(right) < Integer.parseInt(evaluating.parseAttName())){
+					if(Integer.parseInt(evaluating.parseAttName()) < Integer.parseInt(right)){
 						chosenOnes.add(curr);
 						//tupleRef.remove(curr);
 						//i = i - 1;
 					}
 					break;
 				case ">":
-					if(Integer.parseInt(right) > Integer.parseInt(evaluating.parseAttName())){
+					if(Integer.parseInt(evaluating.parseAttName()) > Integer.parseInt(right)){
 						chosenOnes.add(curr);
 						//tupleRef.remove(curr);
 						//i = i - 1;
 					}
 					break;
 				case "<=":
-					if(Integer.parseInt(right) <= Integer.parseInt(evaluating.parseAttName())){
+					if(Integer.parseInt(evaluating.parseAttName()) <= Integer.parseInt(right)){
 						chosenOnes.add(curr);
 						//tupleRef.remove(curr);
 						//i = i - 1;
 					}
 					break;
 				case ">=":
-					if(Integer.parseInt(right) >= Integer.parseInt(evaluating.parseAttName())){
+					if(Integer.parseInt(evaluating.parseAttName()) >= Integer.parseInt(right)){
 						chosenOnes.add(curr);
 						//tupleRef.remove(curr);
-						//i = i - 1;					
+						//i = i - 1;
 					}
 					break;
 				default://error
