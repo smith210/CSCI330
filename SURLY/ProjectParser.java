@@ -1,3 +1,9 @@
+/*
+Name: Martin Smith, Eric Anderson
+CSCI 330 - Spring 2019
+File Name : ProjectParser.java
+*/
+
 import java.util.*;
 
 public class ProjectParser{
@@ -14,7 +20,7 @@ public class ProjectParser{
 		addInfo();
 
 	}
-	
+
 	private int hasFrom(LinkedList<String> info){
 		int i = 0;
 		while(i != info.size() && !info.get(i).equals("FROM")){
@@ -41,7 +47,7 @@ public class ProjectParser{
 	public LinkedList<String> getAttributeNames(){ return attributeNames; }
 
 	public String getRelationName(){ return relationName; }
-	
+
 	public boolean isValid(){ return validStatement; }
 
 }
