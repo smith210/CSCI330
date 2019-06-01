@@ -1,3 +1,9 @@
+/*
+Name: Martin Smith, Eric Anderson
+CSCI 330 - Spring 2019
+File Name : ConditionList.java
+*/
+
 import java.util.*;
 
 public class ConditionList{
@@ -26,8 +32,8 @@ public class ConditionList{
 	}
 
 	/*private boolean hasDup(LinkedList<Tuple> t, Tuple tup, int index){
-		boolean isDup = false;		
-		int curr = 0;		
+		boolean isDup = false;
+		int curr = 0;
 		while(curr != t.size()){
 			if(t.get(curr).parseTupleValues().parseAttName().equals(tup.parseTupleValues().parseAttName())){
 				isDup = true;
@@ -61,7 +67,7 @@ public class ConditionList{
 				//if(temp.size() == 0){
 					//System.out.println("EMPTY");
 					//chosenOnes = temp;
-				//}else{				
+				//}else{
 					chosenOnes.addAll(temp);
 					if(chosenOnes.size() > 1 && i > 0){
 						chosenOnes = removeDups(chosenOnes);
@@ -69,15 +75,10 @@ public class ConditionList{
 				//}
 				//chosenOnes.addAll(temp);
 			}
-
-
-			System.out.println("CL Current iteration: " + i);
-			for(int j = 0; j < chosenOnes.size(); j++){
-				chosenOnes.get(j).display();
-	
+			else {
+				System.out.println("Attribute " + left + " is not in the schema.");
 			}
-
-		}
+  	}
 
 
 		/*for(int j = 0; j < temp.size(); j++){
