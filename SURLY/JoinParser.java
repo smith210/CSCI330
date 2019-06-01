@@ -1,3 +1,9 @@
+/*
+Name: Martin Smith, Eric Anderson
+CSCI 330 - Spring 2019
+File Name : JoinParser.java
+*/
+
 import java.util.*;
 
 public class JoinParser{
@@ -28,9 +34,9 @@ public class JoinParser{
 		if(onPtr != -1){
 			relationAName = content.get(3);
 			relationBName = content.get(4);
-			
+
 		}
-	
+
 	}
 
 	public boolean isValid(){ return validStatement; }
