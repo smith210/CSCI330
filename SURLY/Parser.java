@@ -95,6 +95,16 @@ public class Parser{
 		return catalogPresent;
 	}
 	
+	public boolean hasWhere(){
+		boolean hasWhere = false;
+		for(int i = 0; i < commandSet.size(); i++){
+			if(commandSet.get(i).equals("WHERE")){
+				hasWhere= true;
+			}
+		}
+		return hasWhere;
+	}
+
 	public boolean hasEqual(){
 		return commandSet.get(1).equals("=");
 	}

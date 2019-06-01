@@ -59,13 +59,53 @@ public class InsertParser{
 		}
 	}
 
-	public void implementSize(int index, int attSize){
-		System.out.println(tuple.parseTupleValues().get(index).parseAttName());
-		if(attSize < tuple.parseTupleValues().get(index).parseAttName().length()){
+	/*private Attribute retrieveAtt(){
+		for(int i = 0; i < 
+	}*/
 
-			tuple.parseTupleValues().get(index).setName(tuple.parseTupleValues().get(index).parseAttName().substring(0, attSize));
+	private boolean validType(AttributeValue a, String curr){
+
+		if(curr.equals("NUM")){
+			try{
+				Integer.parseInt(a.parseAttName());
+			}catch(Exception e){
+				return false;
+			}
+		}
+		return true;
+
+		
+	}
+
+	private boolean validSize(AttributeValue a, int curr){
+
+		if(curr < a.parseAttName().length()){
+			return false;
+		}else{
+			return true;
 		}
 
+
+	}
+
+	public boolean isValid(Relation r){
+		LinkedList<Attribute> schema = r.parseRelationSchema();
+		int count = 0;
+		for(int i = 0; i < tuple.parseTupleValues().size(); i++){
+			AttributeValue a = tuple.parseTupleValues().get(i);
+			Attribute curr = schema.get(i);
+			if(validType(a, curr.parseAttributeType()) && validSize(a, curr.parseAttributeLength())){//don't do anything lol
+			}else{
+				break;
+			}
+			count++;
+		}
+		
+		if(count != tuple.parseTupleValues().size()){
+			return false;
+		}else{
+			return true;
+		}
 	}
 
 	public Tuple parseTuple(){

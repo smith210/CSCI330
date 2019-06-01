@@ -77,6 +77,7 @@ public class ConditionList{
 			}
 			else {
 				System.out.println("Attribute " + left + " is not in the schema.");
+				chosenOnes = new LinkedList<Tuple>();
 			}
   	}
 

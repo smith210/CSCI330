@@ -69,11 +69,12 @@ public class LexicalAnalyzer{
 					Relation r = surly.getRelation(ip.parseRelationName());
 					if(!r.parseRelationName().isEmpty()){//relation exists
 						if(ip.hasValidAttNum(r.parseRelationSchema().size())){//valid number of attributes inserting
-							for(int x = 0; x < r.parseRelationSchema().size(); x++){
+							/*for(int x = 0; x < r.parseRelationSchema().size(); x++){
 								ip.implementSize(x, r.parseRelationSchema().get(x).parseAttributeLength());
+							}*/
+							if(ip.isValid(r)){
+								r.insertTuple(ip.parseTuple());
 							}
-							r.insertTuple(ip.parseTuple());
-
 						}
 					}
 				}
@@ -98,14 +99,14 @@ public class LexicalAnalyzer{
 
 				LinkedList<Tuple> empty = new LinkedList<Tuple>();
 				//LinkedList<ConditionList
-				ConditionList conditionList = new ConditionList();
+				//ConditionList conditionList = new ConditionList();
 
 				if(!r.parseRelationName().isEmpty()){//make sure not empty
-					if(!dlt.hasWhere()){
+					if(!parser.hasWhere()){
 						r.deleteTuples(empty);
 					}
 					else {//specialized delete statement
-						LinkedList<Condition> setConditions = conditionList.retrieveList();
+						//LinkedList<Condition> setConditions = conditionList.retrieveList();
 						//r.deleteTuples(conditionList.evalAllConds(r, command));
 						AllConditions conditions = dlt.getConditions();
 						System.out.println(conditions.size());
@@ -128,6 +129,13 @@ public class LexicalAnalyzer{
 					System.out.println(parser.getSecondaryName());
 					switch(parser.getSecondaryName()){
 						case "SELECT":
+							SelectParser sPsr = new SelectParser(parser);
+							sPsr.addRelation(surly);
+							Relation temp = sPsr.getTempRelation();
+							if(temp.parseRelationName().length() != 0){
+								surly.add(temp);
+								updateCatalog(surly.getRelation("CATALOG"), temp.parseRelationName(), temp.parseRelationSchema().size());
+							}
 							break;
 						case "PROJECT":
 							ProjectParser prj = new ProjectParser(parser);

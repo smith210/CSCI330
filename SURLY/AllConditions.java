@@ -1,3 +1,9 @@
+/*
+Name: Martin Smith, Eric Anderson
+CSCI 330 - Spring 2019
+File Name : AllConditions.java
+*/
+
 import java.util.*;
 
 public class AllConditions{
@@ -26,6 +32,55 @@ public class AllConditions{
 		return noDups;
 	}
 
+
+	public void createAllConds(LinkedList<String> commands){
+			int start = commands.indexOf("WHERE");
+			Condition c = new Condition();
+			ConditionList cL = new ConditionList();
+
+			int cPtr = 0;
+			for(int i = start; i < commands.size(); i++){
+				switch(commands.get(i)){
+					case "and":
+						if(c.syntaxValid()){
+							cL.add(c);
+							c = new Condition();
+						}
+						break;
+					case "or":
+						if(c.syntaxValid()){
+							cL.add(c);
+							cLists.add(cL);
+							cL = new ConditionList();
+							c = new Condition();
+						}
+						break;
+					case ";":
+						if(c.syntaxValid()){
+							cL.add(c);
+							cLists.add(cL);
+						}
+						break;
+					default://set up condition
+						if(cPtr == 1){
+							System.out.println("LEFT: " + commands.get(i));
+							c.setLeft(commands.get(i));
+						}else if(cPtr == 2){
+							System.out.println("MIDDLE: " + commands.get(i));
+							c.setEvaluator(commands.get(i));
+						}else if(cPtr == 3){
+							System.out.println("RIGHT: " + commands.get(i));
+							c.setRight(commands.get(i));
+							cPtr = 0;
+						}else{//error
+
+						}
+						cPtr++;
+				}
+
+			}
+
+	}
 
 	public LinkedList<Tuple> evaluateConditions(Relation r, String command){
 		LinkedList<Tuple> temp = new LinkedList<Tuple>();
