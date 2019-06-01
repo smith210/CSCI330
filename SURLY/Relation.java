@@ -11,11 +11,13 @@ public class Relation{
 	private String name;
 	private LinkedList<Attribute> schema;
 	private LinkedList<Tuple> tuples;
+	private boolean isTemp;
 
 	Relation(){
 		this.name = "";
 		this.schema = new LinkedList<Attribute>();
 		this.tuples = new LinkedList<Tuple>();
+		this.isTemp = false;
 	}
 
 	public void setName(String name){
@@ -136,6 +138,9 @@ public class Relation{
 
 
 	}
+
+	public boolean getTemp(){ return isTemp; }
+	public void tempBuff(){ isTemp = true; }
 
 	public int inSchema(String attName){
 		int i = 0;

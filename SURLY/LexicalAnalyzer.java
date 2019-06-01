@@ -53,12 +53,18 @@ public class LexicalAnalyzer{
 				if(rp.parseAttributeCount() != -1){
 					Relation r = rp.parseRelations();
 					Relation search = surly.getRelation(r.parseRelationName());
+					if(search.getTemp()){
+						System.out.println(search.parseRelationName() + "is temp");
+						surly.destroyRelation(search.parseRelationName());
+						search = surly.getRelation(r.parseRelationName());
+					}
 					if(search.parseRelationName().isEmpty()){
 						surly.add(r);
 						updateCatalog(surly.getRelation("CATALOG"), rp.parseRelationName(), rp.parseAttributeCount());
 					}else{
 						System.out.println("Relation " + r.parseRelationName() + " already exists within CATALOG.\n");
 					}
+
 				}else{
 					System.out.println("ERROR - invalid syntax inputted");//invalid syntax
 				}
@@ -74,6 +80,8 @@ public class LexicalAnalyzer{
 							}*/
 							if(ip.isValid(r)){
 								r.insertTuple(ip.parseTuple());
+							}else{
+								System.out.println("Cannot INSERT into " + r.parseRelationName());
 							}
 						}
 					}
@@ -101,7 +109,7 @@ public class LexicalAnalyzer{
 				//LinkedList<ConditionList
 				//ConditionList conditionList = new ConditionList();
 
-				if(!r.parseRelationName().isEmpty()){//make sure not empty
+				if(!r.parseRelationName().isEmpty() && !r.getTemp()){//make sure not empty
 					if(!parser.hasWhere()){
 						r.deleteTuples(empty);
 					}
@@ -117,21 +125,37 @@ public class LexicalAnalyzer{
           
 						//}
 					}
-			 	}
+			 	}else{
+					System.out.println("Cannot DELETE from " + relationDLT);
+				}
 				break;
 			case "DESTROY": // Destroys single relation one at a time
 				DestroyParser dst = new DestroyParser(parser);
 				String relationDST = dst.parseRelationName();
-				surly.destroyRelation(relationDST);
+				Relation rel = surly.getRelation(dst.parseRelationName());
+				if(!rel.getTemp()){
+					surly.destroyRelation(relationDST);
+				}else{
+					System.out.println("Cannot DESTROY " + relationDST);
+				}
 				break;
 			default: // Deal with temporary relations
 				if(parser.hasEqual()){ //valid temporary relation
-					System.out.println(parser.getSecondaryName());
+					Relation currTemp = surly.getRelation(command);				
+					if(currTemp.parseRelationName().length() != 0){
+						if(currTemp.getTemp()){
+							surly.destroyRelation(currTemp.parseRelationName());
+						}else{ //relation is not temp, DO NOT OVERWRITE!
+							System.out.println("Cannot overwrite base relation!");
+							break;
+						}
+					}
 					switch(parser.getSecondaryName()){
 						case "SELECT":
 							SelectParser sPsr = new SelectParser(parser);
 							sPsr.addRelation(surly);
 							Relation temp = sPsr.getTempRelation();
+							temp.tempBuff();
 							if(temp.parseRelationName().length() != 0){
 								surly.add(temp);
 								updateCatalog(surly.getRelation("CATALOG"), temp.parseRelationName(), temp.parseRelationSchema().size());

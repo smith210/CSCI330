@@ -90,21 +90,25 @@ public class InsertParser{
 
 	public boolean isValid(Relation r){
 		LinkedList<Attribute> schema = r.parseRelationSchema();
-		int count = 0;
-		for(int i = 0; i < tuple.parseTupleValues().size(); i++){
-			AttributeValue a = tuple.parseTupleValues().get(i);
-			Attribute curr = schema.get(i);
-			if(validType(a, curr.parseAttributeType()) && validSize(a, curr.parseAttributeLength())){//don't do anything lol
-			}else{
-				break;
+		if(!r.getTemp()){
+			int count = 0;
+			for(int i = 0; i < tuple.parseTupleValues().size(); i++){
+				AttributeValue a = tuple.parseTupleValues().get(i);
+				Attribute curr = schema.get(i);
+				if(validType(a, curr.parseAttributeType()) && validSize(a, curr.parseAttributeLength())){//don't do anything lol
+				}else{
+					break;
+				}
+				count++;
 			}
-			count++;
-		}
 		
-		if(count != tuple.parseTupleValues().size()){
-			return false;
+			if(count != tuple.parseTupleValues().size()){
+				return false;
+			}else{
+				return true;
+			}
 		}else{
-			return true;
+			return false;
 		}
 	}
 
