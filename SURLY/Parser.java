@@ -25,10 +25,21 @@ public class Parser{
 	}
 
 	private void breakCharState(String command, int index){
-			if(command.charAt(index) != ' ' && command.charAt(index) != '\''){
-				commandSet.add(Character.toString(command.charAt(index)));
-				if(command.charAt(index) == ';'){
-					return;
+			char curr = command.charAt(index);
+			if(curr != ' ' && curr != '\''){
+				System.out.println(curr);
+				if(curr == '!' && command.charAt(index+1) == '=' || curr == '>' && command.charAt(index+1) == '=' || curr == '<' && command.charAt(index+1) == '='){
+					System.out.println("HSDJHDSFJHSFJKLDJKLSFDJKJKLSFD");					
+					String equivalence = Character.toString(curr);
+					equivalence = equivalence.concat("=");
+					System.out.println(equivalence);
+					commandSet.add(equivalence);
+					index = index + 1;
+				}else{
+					commandSet.add(Character.toString(command.charAt(index)));
+					if(command.charAt(index) == ';'){
+						return;
+					}
 				}
 			}
 

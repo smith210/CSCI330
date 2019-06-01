@@ -30,8 +30,16 @@ public class Relation{
 		tuples.add(tuple);
 	}
 
+
 	public void deleteTuples(LinkedList<Tuple> deletes){
-		tuples = deletes;
+		//tuples = deletes;
+		for(int i = 0; i < deletes.size(); i++){
+			Tuple deleteTup = deletes.get(i);
+			if(tuples.contains(deleteTup)){
+				tuples.remove(deleteTup);
+			}
+
+		}
 	}
 
 	public void deleteTuple(String name){

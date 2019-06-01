@@ -40,4 +40,12 @@ public class Tuple{
 		}
 		return retVal;
 	}
+
+	public void display(){
+		for(int i = 0; i < values.size(); i++){
+			AttributeValue a = values.get(i);
+			System.out.println(a.parseAttName());
+		}
+
+	}
 }

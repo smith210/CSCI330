@@ -97,20 +97,24 @@ public class LexicalAnalyzer{
 				Relation r = surly.getRelation(relationDLT);
 
 				LinkedList<Tuple> empty = new LinkedList<Tuple>();
+				//LinkedList<ConditionList
 				ConditionList conditionList = new ConditionList();
-				conditionList.retrieveList();
 
 				if(!r.parseRelationName().isEmpty()){//make sure not empty
 					if(!dlt.hasWhere()){
 						r.deleteTuples(empty);
 					}
 					else {//specialized delete statement
-						r.deleteTuples(conditionList.evalAllConds(r, command));
-					//	LinkedList<ConditionList> conditions = dlt.getConditions();
-					//	for(int i = 0; i < conditions.size(); i++){
-					//		ConditionList curr = conditions.get(i);
-          //
-					//	}
+						LinkedList<Condition> setConditions = conditionList.retrieveList();
+						//r.deleteTuples(conditionList.evalAllConds(r, command));
+						AllConditions conditions = dlt.getConditions();
+						System.out.println(conditions.size());
+						//for(int i = 0; i < conditions.size(); i++){
+
+
+							r.deleteTuples(conditions.evaluateConditions(r, command));
+          
+						//}
 					}
 			 	}
 				break;

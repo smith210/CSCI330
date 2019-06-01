@@ -10,7 +10,7 @@ import java.util.*;
 public class DeleteParser {
 	private Parser parser;
   private LinkedList<String> commands;
-	private LinkedList<ConditionList> conditions;
+	private AllConditions conditions;
 
 	 DeleteParser(String input) {
 		Parser p = new Parser(input);
@@ -20,7 +20,7 @@ public class DeleteParser {
 
 	DeleteParser(Parser command){
 		parser = command;
-		conditions = new LinkedList<ConditionList>();
+		conditions = new AllConditions();
 		commands = parser.parseCommandSet();
 		createCases();
 	}
@@ -57,25 +57,29 @@ public class DeleteParser {
 		if(hasWhere()){
 			int start = commands.indexOf("WHERE");
 			Condition c = new Condition();
-			ConditionList curr = new ConditionList();
+			ConditionList cList = new ConditionList();
+
 			int cPtr = 0;
 			for(int i = start; i < commands.size(); i++){
 				switch(commands.get(i)){
 					case "and":
 						if(c.syntaxValid()){
-							curr.add(c);
+							cList.add(c);
+							c = new Condition();
 						}
 						break;
 					case "or":
 						if(c.syntaxValid()){
-							curr.add(c);
-							conditions.add(curr);
-							curr = new ConditionList();
+							cList.add(c);
+							conditions.add(cList);
+							cList = new ConditionList();
+							c = new Condition();
 						}
 						break;
 					case ";":
 						if(c.syntaxValid()){
-							curr.add(c);
+							cList.add(c);
+							conditions.add(cList);
 						}
 						break;
 					default://set up condition
@@ -100,7 +104,7 @@ public class DeleteParser {
 
 	}
 
-	public LinkedList<ConditionList> getConditions(){ return conditions; }
+	public AllConditions getConditions(){ return conditions; }
 
 	public String parseRelationName() {
 		return commands.get(1);
