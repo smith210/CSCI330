@@ -18,7 +18,7 @@ public class AllConditions{
 	public int size(){ return cLists.size(); }
 
 	public ConditionList get(int index){ return cLists.get(index); }
-	
+
 	public LinkedList<ConditionList> getConditions(){ return cLists; }
 
 	private LinkedList<Tuple> removeDups(LinkedList<Tuple> t){
@@ -82,7 +82,7 @@ public class AllConditions{
 
 	}
 
-	public LinkedList<Tuple> evaluateConditions(Relation r, String command){
+	public LinkedList<Tuple> evaluateConditions(Relation r){
 		LinkedList<Tuple> temp = new LinkedList<Tuple>();
 		LinkedList<Tuple> chosenOnes = new LinkedList<Tuple>();
 		LinkedList<Tuple> tupleRef = r.parseRelationTuples();
@@ -97,7 +97,7 @@ public class AllConditions{
 			System.out.println("AC Current iteration: " + i);
 			for(int j = 0; j < chosenOnes.size(); j++){
 				chosenOnes.get(j).display();
-	
+
 			}
 
 		}
