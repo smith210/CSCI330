@@ -45,7 +45,7 @@ public class ConditionList{
 
 	}*/
 
-	public LinkedList<Tuple> evalAllConds(Relation r, String command){//evaluate each condition
+	public LinkedList<Tuple> evalAllConds(Relation r){//evaluate each condition
 		LinkedList<Tuple> temp = new LinkedList<Tuple>();
 		LinkedList<Tuple> chosenOnes = new LinkedList<Tuple>();
 		LinkedList<Tuple> tupleRef = new LinkedList<Tuple>();
@@ -63,7 +63,7 @@ public class ConditionList{
 
 			if(r.inSchema(left) != -1 && curr.typeValid(r.parseRelationSchema().get(r.inSchema(left)).parseAttributeType())) {//search
 
-				temp = curr.parseTuples(r.inSchema(left), tupleRef, tupleRef, command);
+				temp = curr.parseTuples(r.inSchema(left), tupleRef, tupleRef);
 				//if(temp.size() == 0){
 					//System.out.println("EMPTY");
 					//chosenOnes = temp;
