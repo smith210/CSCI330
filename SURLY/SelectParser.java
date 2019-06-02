@@ -31,7 +31,7 @@ public class SelectParser{
 		}
 
 	}
-	
+
 	public void addRelation(SurlyDatabase s){
 		Relation r = s.getRelation(commands.get(3));
 		if(r.parseRelationName().length() != 0){
@@ -40,7 +40,7 @@ public class SelectParser{
 
 			LinkedList<Tuple> tups = new LinkedList<Tuple>();
 			if(cLists.size() != 0){
-				tups = cLists.evaluateConditions(r, "SELECT");
+				tups = cLists.evaluateConditions(r);
 			}else{
 				tups = r.parseRelationTuples();
 			}
