@@ -81,7 +81,7 @@ public class LexicalAnalyzer{
 							if(ip.isValid(r)){
 								r.insertTuple(ip.parseTuple());
 							}else{
-								System.out.println("Cannot INSERT into " + r.parseRelationName());
+								System.out.println("Cannot INSERT into " + r.parseRelationName() + ": temporary relation.");
 							}
 						}
 					}
@@ -121,12 +121,12 @@ public class LexicalAnalyzer{
 						//for(int i = 0; i < conditions.size(); i++){
 
 
-							r.deleteTuples(conditions.evaluateConditions(r, command));
-          
+							r.deleteTuples(conditions.evaluateConditions(r));
+
 						//}
 					}
 			 	}else{
-					System.out.println("Cannot DELETE from " + relationDLT);
+					System.out.println("Cannot DELETE from " + relationDLT + ": temporary relation.");
 				}
 				break;
 			case "DESTROY": // Destroys single relation one at a time
@@ -136,12 +136,12 @@ public class LexicalAnalyzer{
 				if(!rel.getTemp()){
 					surly.destroyRelation(relationDST);
 				}else{
-					System.out.println("Cannot DESTROY " + relationDST);
+					System.out.println("Cannot DESTROY " + relationDST + ": temporary relation.");
 				}
 				break;
 			default: // Deal with temporary relations
 				if(parser.hasEqual()){ //valid temporary relation
-					Relation currTemp = surly.getRelation(command);				
+					Relation currTemp = surly.getRelation(command);
 					if(currTemp.parseRelationName().length() != 0){
 						if(currTemp.getTemp()){
 							surly.destroyRelation(currTemp.parseRelationName());
@@ -154,18 +154,25 @@ public class LexicalAnalyzer{
 						case "SELECT":
 							SelectParser sPsr = new SelectParser(parser);
 							sPsr.addRelation(surly);
-							Relation temp = sPsr.getTempRelation();
-							temp.tempBuff();
-							if(temp.parseRelationName().length() != 0){
-								surly.add(temp);
-								updateCatalog(surly.getRelation("CATALOG"), temp.parseRelationName(), temp.parseRelationSchema().size());
+							Relation temp1 = sPsr.getTempRelation();
+							temp1.tempBuff();
+							if(temp1.parseRelationName().length() != 0){
+								surly.add(temp1);
+								updateCatalog(surly.getRelation("CATALOG"), temp1.parseRelationName(), temp1.parseRelationSchema().size());
 							}
 							break;
 						case "PROJECT":
 							ProjectParser prj = new ProjectParser(parser);
 							if(prj.isValid()){
-
-
+								prj.addInfo(surly);
+								prj.addRelation(surly);
+								Relation temp2 = prj.getTempRelation();
+								temp2.tempBuff();
+								System.out.println("HERE " + temp2.parseRelationName());
+								if(temp2.parseRelationName().length() != 0){
+									surly.add(temp2);
+									updateCatalog(surly.getRelation("CATALOG"), temp2.parseRelationName(), temp2.parseRelationSchema().size());
+								}
 							}
 							break;
 						case "JOIN":
