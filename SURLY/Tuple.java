@@ -21,6 +21,16 @@ public class Tuple{
 		values.add(value);
 	}
 
+	public Tuple getTuple(int index) {
+		Tuple neww = new Tuple();
+		neww.add(values.get(index));
+		return neww;
+	}
+
+	public AttributeValue getAttVal(int index) {
+		return values.get(index);
+	}
+
 	public LinkedList<AttributeValue> parseTupleValues(){
 		return this.values;
 	}
