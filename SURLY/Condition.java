@@ -41,7 +41,7 @@ public class Condition{
 		}
 	}
 
-	public LinkedList<Tuple> parseTuples(int index, LinkedList<Tuple> allTuples, LinkedList<Tuple> tupleRef, String command){
+	public LinkedList<Tuple> parseTuples(int index, LinkedList<Tuple> allTuples, LinkedList<Tuple> tupleRef){
 		System.out.println(allTuples.size());
 
 
