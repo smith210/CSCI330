@@ -89,7 +89,7 @@ public class AllConditions{
 
 		for(int i = 0; i < cLists.size(); i++){
 			ConditionList c = cLists.get(i);
-			temp = c.evalAllConds(r, command);
+			temp = c.evalAllConds(r);
 			chosenOnes.addAll(temp);
 			if(chosenOnes.size() > 1 && i > 0){
 				chosenOnes = removeDups(chosenOnes);
@@ -106,8 +106,4 @@ public class AllConditions{
 
 		return chosenOnes;
 	}
-
-
-
-
 }
