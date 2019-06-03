@@ -63,13 +63,10 @@ public class AllConditions{
 						break;
 					default://set up condition
 						if(cPtr == 1){
-							System.out.println("LEFT: " + commands.get(i));
 							c.setLeft(commands.get(i));
 						}else if(cPtr == 2){
-							System.out.println("MIDDLE: " + commands.get(i));
 							c.setEvaluator(commands.get(i));
 						}else if(cPtr == 3){
-							System.out.println("RIGHT: " + commands.get(i));
 							c.setRight(commands.get(i));
 							cPtr = 0;
 						}else{//error
@@ -94,16 +91,7 @@ public class AllConditions{
 			if(chosenOnes.size() > 1 && i > 0){
 				chosenOnes = removeDups(chosenOnes);
 			}
-			System.out.println("AC Current iteration: " + i);
-			for(int j = 0; j < chosenOnes.size(); j++){
-				chosenOnes.get(j).display();
-
-			}
-
 		}
-		//chosenOnes.addAll(temp);
-
-
 		return chosenOnes;
 	}
 }

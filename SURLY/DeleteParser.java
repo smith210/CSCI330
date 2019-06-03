@@ -9,55 +9,48 @@ import java.util.*;
 
 public class DeleteParser {
 	private Parser parser;
-  private LinkedList<String> commands;
+    private LinkedList<String> commands;
 	private AllConditions conditions;
+	private LinkedList<String> relations;
 
 	 DeleteParser(String input) {
 		Parser p = new Parser(input);
 	 	commands = p.parseCommandSet();
-
 	 }
 
 	DeleteParser(Parser command){
 		parser = command;
 		conditions = new AllConditions();
 		commands = parser.parseCommandSet();
+		relations = new LinkedList<String>();
+		getDeleteRelations();
 		createCases();
 	}
 
-	/*private Conditions createCond(int index){
-		switch(index){
-			case 0://left
-
-				break;
-			case 1://evaluator
-
-				break;
-			case 2://right
-
-				break;
-			default:
-
+	private void getDeleteRelations(){
+		for(int i = 1; i < commands.size(); i = i+2){
+			relations.add(commands.get(i));
 		}
-
-	}*/
+	}
 
 	private void createCases(){
-		parser.printContent();
 		if(parser.hasWhere()){
 			conditions.createAllConds(commands);
 		}
-
 	}
 
 	public AllConditions getConditions(){ return conditions; }
 
-	public String parseRelationName() {
+	public String parseRelationName(){
 		return commands.get(1);
+	}
+
+	public LinkedList<String> parseRelationNames() {
+		return relations;
 	}
  
 
-  public LinkedList<String> parseCommands() {
-    return commands;
-  }
+    public LinkedList<String> parseCommands() {
+	    return commands;
+    }
 }

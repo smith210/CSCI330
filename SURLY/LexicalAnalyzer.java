@@ -45,6 +45,14 @@ public class LexicalAnalyzer{
 		catalog.insertTuple(t);
 	}
 
+	private void deleteErrorMssg(Relation r, String relationDLT){
+		if(r.parseRelationName().isEmpty()){
+			System.out.println("Relation " + relationDLT + " doesn't exist.");
+		}else{
+			System.out.println("Cannot DELETE from " + relationDLT + ": temporary relation.");
+		}
+	}
+
 	private void parseInstructions(String command){
 
 		switch(command){
@@ -54,7 +62,6 @@ public class LexicalAnalyzer{
 					Relation r = rp.parseRelations();
 					Relation search = surly.getRelation(r.parseRelationName());
 					if(search.getTemp()){
-						System.out.println(search.parseRelationName() + "is temp");
 						surly.destroyRelation(search.parseRelationName());
 						search = surly.getRelation(r.parseRelationName());
 					}
@@ -62,11 +69,11 @@ public class LexicalAnalyzer{
 						surly.add(r);
 						updateCatalog(surly.getRelation("CATALOG"), rp.parseRelationName(), rp.parseAttributeCount());
 					}else{
-						System.out.println("Relation " + r.parseRelationName() + " already exists within CATALOG.\n");
+						System.out.println("Relation " + r.parseRelationName() + " already exists within CATALOG.");
 					}
 
 				}else{
-					System.out.println("ERROR - invalid syntax inputted");//invalid syntax
+					System.out.println("ERROR - invalid syntax inputted for Relation " + rp.parseRelationName() + ".");//invalid syntax
 				}
 				break;
 			case "INSERT"://parse Insert commands
@@ -75,13 +82,14 @@ public class LexicalAnalyzer{
 					Relation r = surly.getRelation(ip.parseRelationName());
 					if(!r.parseRelationName().isEmpty()){//relation exists
 						if(ip.hasValidAttNum(r.parseRelationSchema().size())){//valid number of attributes inserting
-							/*for(int x = 0; x < r.parseRelationSchema().size(); x++){
-								ip.implementSize(x, r.parseRelationSchema().get(x).parseAttributeLength());
-							}*/
 							if(ip.isValid(r)){
 								r.insertTuple(ip.parseTuple());
 							}else{
-								System.out.println("Cannot INSERT into " + r.parseRelationName() + ": temporary relation.");
+								if(r.getTemp()){
+									System.out.println("Cannot INSERT into " + r.parseRelationName() + ": temporary relation.");
+								}else{
+									System.out.println("Invalid INSERT syntax for inserting into " + r.parseRelationName() + ".");
+								}
 							}
 						}
 					}
@@ -93,9 +101,11 @@ public class LexicalAnalyzer{
 				for(int i = 0; i < relationsToPrint.length; i++){//for each Relation to print
 					Relation r = surly.getRelation(relationsToPrint[i]);
 					if(r.parseRelationName().isEmpty()){//don't print non-existant relations
-						  System.out.println("Relation " + pp.parseRelationNames()[i] + " doesn't exist within CATALOG.\n");
+						  System.out.println("Relation " + pp.parseRelationNames()[i] + " doesn't exist within CATALOG.");
 					}else{
+						System.out.println("\nPrinting " + pp.parseRelationNames()[i] + "...");
 						r.display();
+						System.out.println(" ");
 					}
 				}
 				break;
@@ -103,31 +113,32 @@ public class LexicalAnalyzer{
 				DeleteParser dlt = new DeleteParser(parser);
 				LinkedList<String> relations = dlt.parseCommands();
 				String relationDLT = dlt.parseRelationName();
-				Relation r = surly.getRelation(relationDLT);
+				Relation r = new Relation();
+				//Relation r = surly.getRelation(relationDLT);
 
-				LinkedList<Tuple> empty = new LinkedList<Tuple>();
-				//LinkedList<ConditionList
-				//ConditionList conditionList = new ConditionList();
-
-				if(!r.parseRelationName().isEmpty() && !r.getTemp()){//make sure not empty
-					if(!parser.hasWhere()){
-						r.deleteTuples(empty);
+				//if(!r.parseRelationName().isEmpty() && !r.getTemp()){//make sure not empty
+				if(!parser.hasWhere()){
+					for(int i = 0; i < dlt.parseRelationNames().size(); i++){
+						r = surly.getRelation(dlt.parseRelationNames().get(i));
+						if(!r.parseRelationName().isEmpty() && !r.getTemp()){
+							r.deleteAllTuples();
+						}else{
+							deleteErrorMssg(r, dlt.parseRelationNames().get(i));
+						}
 					}
-					else {//specialized delete statement
-						//LinkedList<Condition> setConditions = conditionList.retrieveList();
-						//r.deleteTuples(conditionList.evalAllConds(r, command));
-						AllConditions conditions = dlt.getConditions();
-						System.out.println(conditions.size());
-						//for(int i = 0; i < conditions.size(); i++){
-
-
-							r.deleteTuples(conditions.evaluateConditions(r));
-
-						//}
-					}
-			 	}else{
-					System.out.println("Cannot DELETE from " + relationDLT + ": temporary relation.");
+					//r.deleteAllTuples();
 				}
+				else {//specialized delete statement
+					r = surly.getRelation(relationDLT);
+					if(!r.parseRelationName().isEmpty() && !r.getTemp()){
+						AllConditions conditions = dlt.getConditions();
+						r.deleteTuples(conditions.evaluateConditions(r));
+					}else{
+						deleteErrorMssg(r, relationDLT);
+					}
+				}
+		 		//}else{
+				//}
 				break;
 			case "DESTROY": // Destroys single relation one at a time
 				DestroyParser dst = new DestroyParser(parser);
@@ -141,21 +152,31 @@ public class LexicalAnalyzer{
 				break;
 			default: // Deal with temporary relations
 				if(parser.hasEqual()){ //valid temporary relation
+					boolean tempDeleted = false;
 					Relation currTemp = surly.getRelation(command);
 					if(currTemp.parseRelationName().length() != 0){
 						if(currTemp.getTemp()){
+							tempDeleted = true;
 							surly.destroyRelation(currTemp.parseRelationName());
 						}else{ //relation is not temp, DO NOT OVERWRITE!
-							System.out.println("Cannot overwrite base relation!");
+							System.out.println("Cannot overwrite base relation " + currTemp.parseRelationName() + "!");
 							break;
 						}
 					}
 					switch(parser.getSecondaryName()){
 						case "SELECT":
 							SelectParser sPsr = new SelectParser(parser);
-							sPsr.addRelation(surly);
+							Relation rSel = surly.getRelation(sPsr.getRelationName());							
+							if(tempDeleted){
+								rSel = currTemp;
+							}
+							sPsr.addRelation(rSel);
 							Relation temp1 = sPsr.getTempRelation();
 							temp1.tempBuff();
+
+							if(temp1.tupleSize() == 0){
+								temp1.setSchema(new LinkedList<Attribute>());
+							}
 							if(temp1.parseRelationName().length() != 0){
 								surly.add(temp1);
 								updateCatalog(surly.getRelation("CATALOG"), temp1.parseRelationName(), temp1.parseRelationSchema().size());
@@ -164,11 +185,18 @@ public class LexicalAnalyzer{
 						case "PROJECT":
 							ProjectParser prj = new ProjectParser(parser);
 							if(prj.isValid()){
-								prj.addInfo(surly);
-								prj.addRelation(surly);
+								Relation rPrj = surly.getRelation(prj.getRelationName());
+								if(tempDeleted){
+									rPrj = currTemp;
+								}
+								prj.addInfo(rPrj);
+								prj.addRelation(rPrj);
 								Relation temp2 = prj.getTempRelation();
 								temp2.tempBuff();
-								System.out.println("HERE " + temp2.parseRelationName());
+
+								if(temp2.tupleSize() == 0){
+									temp2.setSchema(new LinkedList<Attribute>());
+								}
 								if(temp2.parseRelationName().length() != 0){
 									surly.add(temp2);
 									updateCatalog(surly.getRelation("CATALOG"), temp2.parseRelationName(), temp2.parseRelationSchema().size());
@@ -178,8 +206,34 @@ public class LexicalAnalyzer{
 						case "JOIN":
 							JoinParser jPsr = new JoinParser(parser);
 							if(jPsr.isValid()){
+								Relation A = surly.getRelation(jPsr.getRelationAName());
+								Relation B = surly.getRelation(jPsr.getRelationBName());
+								if(tempDeleted){
+									if(A.parseRelationName().isEmpty() && B.parseRelationName().isEmpty()){
+										A = currTemp;
+										B = currTemp;
+									}else if(A.parseRelationName().isEmpty()){//A relation is empty
+										A = currTemp;
+									}else{//B relation is empty
+										B = currTemp;
+									}
+								}
+								if(!A.parseRelationName().isEmpty() && !B.parseRelationName().isEmpty()){
+									jPsr.setRelationA(A);
+									jPsr.setRelationB(B);
+									if(jPsr.validRelations()){
+										jPsr.getComparison();
+										Relation temp3 = jPsr.getTempRelation();
 
-
+										if(temp3.tupleSize() == 0){
+											temp3.setSchema(new LinkedList<Attribute>());
+										}
+										if(temp3.parseRelationName().length() != 0){
+											surly.add(temp3);
+											updateCatalog(surly.getRelation("CATALOG"), temp3.parseRelationName(), temp3.parseRelationSchema().size());
+										}
+									}
+								}
 							}
 							break;
 						default://not valid temporary syntax
@@ -220,9 +274,7 @@ public class LexicalAnalyzer{
 				command = command.concat(currLine);
 				if(command.contains(";")){//end of command has been reached
 					parser = new Parser(command);
-					//parser.printContent();
 					String nextCommand = command.substring(command.indexOf(';') + 1);
-					System.out.println(command);
 					if(!parser.hasCatalog()){
 						parseInstructions(parser.getRelationName());
 

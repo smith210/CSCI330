@@ -42,61 +42,43 @@ public class Condition{
 	}
 
 	public LinkedList<Tuple> parseTuples(int index, LinkedList<Tuple> allTuples, LinkedList<Tuple> tupleRef){
-		System.out.println(allTuples.size());
-
 
 	    LinkedList<Tuple> chosenOnes = new LinkedList<Tuple>();
-		//System.out.println(allTuples.size());
+
 		for(int i = 0; i < allTuples.size(); i++){
 			Tuple curr = allTuples.get(i);
 			AttributeValue evaluating = curr.parseTupleValues().get(index);
 
-			//System.out.println("general check: " + evaluating.parseAttName());
 			switch(conditionEval){
 				case "=":
-					System.out.println("= check: " + evaluating.parseAttName());
 					if(right.equals(evaluating.parseAttName())) {
-						System.out.println("evaluated true");
 						chosenOnes.add(curr);
-						//tupleRef.remove(curr);
-						//i = i - 1;
 					}
 					break;
 				case "!=":
-					System.out.println("!= check: " + evaluating.parseAttName());
 					if(!right.equals(evaluating.parseAttName())){
-						System.out.println("evaluated true");
 						chosenOnes.add(curr);
-						//tupleRef.remove(curr);
-						//i = i - 1;
 					}
 					break;
 				case "<":
 					if(Integer.parseInt(evaluating.parseAttName()) < Integer.parseInt(right)){
 						chosenOnes.add(curr);
-						//tupleRef.remove(curr);
-						//i = i - 1;
 					}
 					break;
 				case ">":
 					if(Integer.parseInt(evaluating.parseAttName()) > Integer.parseInt(right)){
 						chosenOnes.add(curr);
-						//tupleRef.remove(curr);
-						//i = i - 1;
 					}
 					break;
 				case "<=":
 					if(Integer.parseInt(evaluating.parseAttName()) <= Integer.parseInt(right)){
 						chosenOnes.add(curr);
-						//tupleRef.remove(curr);
-						//i = i - 1;
 					}
 					break;
 				case ">=":
 					if(Integer.parseInt(evaluating.parseAttName()) >= Integer.parseInt(right)){
 						chosenOnes.add(curr);
-						//tupleRef.remove(curr);
-						//i = i - 1;
+
 					}
 					break;
 				default://error
@@ -104,12 +86,9 @@ public class Condition{
 			}
 
 		}
-		/*if(command.equals("DELETE")) {
-			return tupleRef;
-		}
-		else {*/
-			return chosenOnes;
-		//}
+
+		return chosenOnes;
+
 	}
 
 }

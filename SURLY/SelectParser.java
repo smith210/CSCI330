@@ -22,23 +22,22 @@ public class SelectParser{
 		addInfo();
 	}
 
+
 	private void addInfo(){
-
 		relationname = commands.get(0);
-
 		if(p.hasWhere()){
 			cLists.createAllConds(commands);
 		}
-
 	}
 
-	public void addRelation(SurlyDatabase s){
-		Relation r = s.getRelation(commands.get(3));
+	public void addRelation(Relation r){
+		//Relation r = s.getRelation(commands.get(3));
+		tempR.setName(relationname);
+		tempR.setSchema(new LinkedList<Attribute>());
 		if(r.parseRelationName().length() != 0){
-			tempR.setName(relationname);
 			tempR.setSchema(r.parseRelationSchema());
-
 			LinkedList<Tuple> tups = new LinkedList<Tuple>();
+
 			if(cLists.size() != 0){
 				tups = cLists.evaluateConditions(r);
 			}else{
@@ -48,9 +47,9 @@ public class SelectParser{
 				tempR.insertTuple(tups.get(i));
 			}
 		}
-
 	}
 
+	public String getRelationName(){ return commands.get(3); }
 	public Relation getTempRelation(){ return tempR; }
 
 }

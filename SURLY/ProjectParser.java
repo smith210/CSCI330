@@ -16,6 +16,7 @@ public class ProjectParser{
 
 	ProjectParser(Parser p){
 		attributeNames = new LinkedList<Attribute>();
+		relationNameString = new String();
 		this.p = p;
 		tempR = new Relation();
 		validStatement = true;
@@ -35,15 +36,14 @@ public class ProjectParser{
 		return i;
 	}
 
-	public void addInfo(SurlyDatabase s){
+
+	public void addInfo(Relation relation){
 		LinkedList<String> content = p.parseCommandSet();
 		int fromPtr = hasFrom(content);
 		int checkValidAtts1 = 0;
 		int checkValidAtts2 = 0;
 		if(fromPtr != -1){
 			relationNameString = content.get(fromPtr + 1);
-			Relation relation = s.getRelation(relationNameString);
-
 			for(int i = 3; i < fromPtr; i = i + 2){
 				Attribute att = new Attribute();
 				att.setAttributeName(content.get(i));
@@ -52,7 +52,7 @@ public class ProjectParser{
 						checkValidAtts1++;
 						att.setDataType(relation.parseRelationSchema().get(j).parseAttributeType());
 						att.setLength(relation.parseRelationSchema().get(j).parseAttributeLength());
-				  }
+				  	}
 				}
 				attributeNames.add(att);
 				checkValidAtts2++;
@@ -67,23 +67,24 @@ public class ProjectParser{
 				}
 				else {
 					System.out.println("Relation " + relationNameString + " does not contain given schema; check input.");
-		   	}
+		   		}
 			}
 		}
+
 	}
 
-	public void addRelation(SurlyDatabase s){
+	public void addRelation(Relation r){
 		if(tempR.parseRelationName().length() != 0){
 
-		  LinkedList<Tuple> tempTups = new LinkedList<Tuple>();
+		  	LinkedList<Tuple> tempTups = new LinkedList<Tuple>();
 			LinkedList<Tuple> baseTups = new LinkedList<Tuple>();
 			LinkedList<Attribute> baseAtts = new LinkedList<Attribute>();
 			LinkedList<Attribute> tempAtts = new LinkedList<Attribute>();
-			baseTups = s.getRelation(relationNameString).parseRelationTuples();
-			baseAtts = s.getRelation(relationNameString).parseRelationSchema();
+			baseTups = r.parseRelationTuples();
+			baseAtts = r.parseRelationSchema();
 			tempAtts = tempR.parseRelationSchema();
 
-	  	boolean check = false;
+		  	boolean check = false;
 			for(int i = 0; i < tempAtts.size(); i++) {
 				for(int j = 0; j < baseAtts.size(); j++) {
 					if(baseAtts.get(j).parseAttributeName().equals(tempAtts.get(i).parseAttributeName())) {
@@ -99,33 +100,53 @@ public class ProjectParser{
 					}
 				}
 			}
+			removeDuplicates(tempTups);
+		}
 
-			int count = 0; // checking if a duplicate tuple exists by examining each tuple attribute
-			for(int i = 0; i < tempTups.size(); i++) {
-				for(int j = i+1; j < tempTups.size(); j++) {
-					for(int k = 0; k < tempTups.get(i).parseTupleValues().size(); k++) {
-						if(tempTups.get(i).parseTupleValues().get(k).parseAttName().equals(tempTups.get(j).parseTupleValues().get(k).parseAttName())) {
-							count++;
-						}
-					}
-					if (count == tempTups.get(i).parseTupleValues().size()) {
-					  tempTups.remove(i);
-						count = 0;
-					}
+	}
+
+	private boolean isDup(Tuple one, Tuple two, int colNums){
+		int curr = 0;
+		int similars = 0;
+		while(curr != colNums){
+			if(one.parseTupleValues().get(curr).parseAttName().equals(two.parseTupleValues().get(curr).parseAttName())){
+				similars++;
+			}
+			curr++;
+		}
+		if(similars == colNums){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	private void removeDuplicates(LinkedList<Tuple> tups){
+		int curr = 0;
+		int totalCols = tups.get(curr).parseTupleValues().size();
+			
+		while(curr != tups.size()){
+			Tuple t = tups.get(curr);
+			boolean canAdd = true;
+			for(int i = curr + 1; i < tups.size(); i++){
+				boolean alreadyExists = isDup(t, tups.get(i), totalCols);
+				if(alreadyExists){
+					canAdd = false;
+					break;
 				}
 			}
-
-			for(int i = 0; i < tempTups.size(); i++) {
-		   	tempR.insertTuple(tempTups.get(i));
+			if(canAdd){
+				tempR.insertTuple(t);
 			}
-		}
+			curr++;
+		}	
 	}
 
 	public Relation getTempRelation(){ return tempR; }
 
 	public LinkedList<Attribute> getAttributeNames(){ return attributeNames; }
 
-	public String getRelationName(){ return relationNameString; }
+	public String getRelationName(){ return commands.get(commands.size() - 2); }
 
 	public boolean isValid(){ return validStatement; }
 

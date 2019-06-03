@@ -32,15 +32,19 @@ public class Relation{
 		tuples.add(tuple);
 	}
 
+	public void deleteAllTuples(){
+		tuples = new LinkedList<Tuple>();
+	}
+
+
+	public int tupleSize(){ return tuples.size(); }
 
 	public void deleteTuples(LinkedList<Tuple> deletes){
-		//tuples = deletes;
 		for(int i = 0; i < deletes.size(); i++){
 			Tuple deleteTup = deletes.get(i);
 			if(tuples.contains(deleteTup)){
 				tuples.remove(deleteTup);
 			}
-
 		}
 	}
 
@@ -116,6 +120,9 @@ public class Relation{
 		for(int dash = 0; dash < tableWidth(); dash++){
 			System.out.print("-");
 		}
+		if(tableWidth() == 1){
+			System.out.print("-------------------");
+		}
 		System.out.println(" ");
 	}
 
@@ -126,7 +133,12 @@ public class Relation{
 		for(int currSch = 0; currSch < schema.size(); currSch++){
 			displaySchema(schema.get(currSch));
 		}
-		System.out.println("|");
+		System.out.print("|");
+		if(tableWidth() == 1){
+			printSpaces(18);
+			System.out.print("|");
+		}
+		System.out.println(" ");
 
 		createBorder();
 

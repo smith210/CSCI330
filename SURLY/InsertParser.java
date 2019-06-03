@@ -14,14 +14,11 @@ public class InsertParser{
 
 	InsertParser(Parser p){
 		addInfo(p);
-
 	}
 
 	InsertParser(String command){
-
 		Parser p = new Parser(command);
 		addInfo(p);
-
 	}
 
 	private void addInfo(Parser p){
@@ -48,7 +45,6 @@ public class InsertParser{
 		}
 		tuple = t;
 		attrNum = attrVar;
-		System.out.println(attrNum);
 	}
 
 	public boolean hasValidAttNum(int attLimit){
@@ -58,10 +54,6 @@ public class InsertParser{
 			return false;
 		}
 	}
-
-	/*private Attribute retrieveAtt(){
-		for(int i = 0; i < 
-	}*/
 
 	private boolean validType(AttributeValue a, String curr){
 
@@ -95,7 +87,7 @@ public class InsertParser{
 			for(int i = 0; i < tuple.parseTupleValues().size(); i++){
 				AttributeValue a = tuple.parseTupleValues().get(i);
 				Attribute curr = schema.get(i);
-				if(validType(a, curr.parseAttributeType()) && validSize(a, curr.parseAttributeLength())){//don't do anything lol
+				if(validType(a, curr.parseAttributeType()) && validSize(a, curr.parseAttributeLength())){//don't do anything
 				}else{
 					break;
 				}
