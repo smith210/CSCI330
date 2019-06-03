@@ -1,0 +1,388 @@
+--------------------
+###### Input:
+
+#RELATION
+#DEFINITIONS
+
+DELETE COURSE;
+RELATION COURSE (CNUM CHAR 8, TITLE CHAR 30, CREDITS NUM 4);
+RELATION PREREQ (CNUM CHAR 8,
+                PNUM CHAR 8);
+RELATION OFFERING    (CNUM       CHAR    8,
+                    SECTION     NUM     5,
+                    STARTHOUR   CHAR    5,
+                    ENDHOUR     CHAR    5,
+                    DAYS        CHAR    5,
+                    ROOM        CHAR    10,
+                    INSTRUCTOR  CHAR    20);
+RELATION STAFF (NAME CHAR 20,
+                SPOUSE CHAR 10,
+                RANK CHAR 5,
+                CAMPUSADDR CHAR 10,
+                EXTENSION CHAR 9);
+RELATION INTERESTS (NAME CHAR 20,
+                    INTEREST CHAR 30asfd);
+RELATION DEPT (NAME CHAR 20, DEPT CHAR 4);
+RELATION DEPT (NAME CHAR 2, DEPT CHAR 2);
+
+PRINT CATALOG;
+
+#INSERTING TUPLES
+INSERT COURSE CSCI141 'COMPUTER PROGRAMMING I' 89jkv;  # bad format
+INSERT COURSE CSCI145 'COMP PROG & LINEAR DATA STRUCTURES' 4;
+INSERT COURSE CSCI241 'DATA STRUCTURES' 4;
+INSERT COURSE CSCI301 'FORMAL LANGUAGES' 5;
+INSERT COURSE CSCI305 ALGORITHMS 4;
+INSERT COURSE CSCI330 'DATABASE SYSTEMS' 4;
+INSERT COURSE CSCI345 'OBJECT ORIENTED DESIGN' 4;
+INSERT COURSE ERR354 'bfd' TREE;
+
+INSERT PREREQ CSCI141 MATH112;
+INSERT PREREQ CSCI145 MATH115;
+INSERT PREREQ CSCI145 CSCI141;
+INSERT PREREQ CSCI241 MATH124;
+INSERT PREREQ CSCI241 CSCI145;
+INSERT PREREQ CSCI301 CSCI145;
+INSERT PREREQ CSCI305 CSCI301 TOO MANY ARGS;
+INSERT PREREQ CSCI305 CSCI241;
+INSERT PREREQ CSCI330 CSCI241;
+INSERT PREREQ CSCI345;
+
+INSERT OFFERING CSCI141 27921 13:00 13:50 MWF CF115 JAGODZINSKI;
+RRRRRRRRRRRRRRRRRRRRRREGRET OFFERING CSCI241 27922 9:00 9:50 MWF AW205 ISLAM;
+INSERT OFFERING CSCI241 27935 11:00 11:50 MWF AW403 BOVER;
+INSERT OFFERING CSCI305 27950 14:00 14:50 MTWF AW403 LIU;
+INSERT OFFERING CSCI330 27974 12:00 12:50 MTWF CF314 DENEKE;
+INSERT OFFERING CSCI330 27977 14:00 14:50 MTWF CF316 DENEKE;
+
+INSERT STAFF GREGORY DON SEC A8C 0030;
+INSERT STAFF DENEKE WHO ASSIS 'CF 479' 3769;
+
+INSERT INTERESTS DENEKE AI;
+INSERT INTERESTS DENEKE DBMS;
+INSERT INTERESTS DENEKE BEYONDTHETHIRTYCHARACTERLIMITFORSURE;
+
+INSERT DEPT DENEKE CSCI;
+INSERT DEPT LIU CSCI;
+INSERT DEPT ISLAM CSCI;
+INSERT DEPT ANOTHER MUS;
+INSERT DEPT MARTIN MUS;
+INSERT DEPT ERIC MUS;
+INSERT DEPT TOMMY MATHS;
+INSERT DEPT TWO FIN;
+INSERT DEPT THREE FIN;
+INSERT DEPT MONEY FIN;
+INSERT DEPT CENA REC;
+
+DELETE CATALOG;
+DELETE fgthyju;
+DELETE DEPT WHERE NAME = 'ISLAM' or NAME = 'DENEKE';
+DELETE COURSE WHERE CNUM = 'ERR354' and CNUM = 'CSCI145';
+C = SELECT COURSE WHERE TITLE = 'DATABASE SYSTEMS' or CNUM != CSCI301 and CREDITS > 3;
+HELLO = SELECT OFFERING WHERE SECTION > 27922;
+C1 = SELECT C WHERE CNUM = 'CSCI330' or CNUM = 'CSCI345';
+PRINT COURSE;
+PRINT HELLO;
+COURSE = SELECT C WHERE CNUM = 'CSCI305' or CNUM = 'CSCI241';
+PRINT C1;
+
+J = JOIN COURSE, PREREQ ON COURSE.CNUM = PREREQ.CNUM;
+PRINT J;
+DESTROY J;
+T1 = JOIN COURSE, PREREQ ON CNUM = PNUM;
+PRINT T1;
+T2 = SELECT T1 WHERE CNUM = CSCI241;
+PRINT T2;
+T3 = PROJECT CREDITS, TITLE FROM T2;
+PRINT T3;
+
+RELATION C1 (CNUM CHAR 8, TITLE CHAR 30, CREDITS NUM 4);
+PRINT CATALOG;
+INSERT C1 CSCI999 'TOO GOOD FOR YA' 180;
+C1 = SELECT C WHERE CNUM = 'CSCI330' or CNUM = 'CSCI345';
+PRINT C1;
+P = PROJECT CNUM, INSTRUCTOR, INSTRUCTOR FROM OFFERING;
+PTRUE1 = PROJECT CNUM, CNUM, CNUM, CNUM, PNUM FROM PREREQ;
+PFALSE2 = PROJECT STARTHOUR, ENDHOUR FROM FALSE;
+P1 = SELECT P WHERE INSTRUCTOR != LIU;
+PRINT P1;
+P1 = SELECT PFALSE2 WHERE STARTHOUR != 14:00;
+PRINT P1;
+PRINT PTRUE1;
+DESTROY P;
+PRINT CATALOG;
+PRINT COURSE;
+DELETE COURSE, STAFF, DND;
+PRINT COURSE, STAFF, DND;
+
+PRACT = SELECT DEPT WHERE NAME = 'CENA';
+PRACT = SELECT PRACT WHERE DEPT = 'REC';
+PRINT PRACT;
+PRINT CATALOG;
+TEST = PROJECT DEPT, NAME FROM DEPT;
+TEST2 = PROJECT DEPT FROM DEPT;
+PRINT TEST, TEST2;
+
+------------------
+###### Output:
+
+Relation COURSE doesn't exist.
+ERROR - invalid syntax inputted for Relation INTERESTS.
+Relation DEPT already exists within CATALOG.
+
+Printing CATALOG...
+-------------------------------------------
+|RELATION                      |ATTRIBUTES|
+-------------------------------------------
+|COURSE                        |3         |
+|PREREQ                        |2         |
+|OFFERING                      |7         |
+|STAFF                         |5         |
+|DEPT                          |2         |
+-------------------------------------------
+
+Invalid INSERT syntax for inserting into COURSE.
+Invalid INSERT syntax for inserting into COURSE.
+Invalid INSERT syntax for inserting into DEPT.
+Relation fgthyju doesn't exist.
+
+Printing COURSE...
+-------------------------------------------------
+|CNUM    |TITLE                         |CREDITS|
+-------------------------------------------------
+|CSCI241 |DATA STRUCTURES               |4      |
+|CSCI301 |FORMAL LANGUAGES              |5      |
+|CSCI305 |ALGORITHMS                    |4      |
+|CSCI330 |DATABASE SYSTEMS              |4      |
+|CSCI345 |OBJECT ORIENTED DESIGN        |4      |
+-------------------------------------------------
+
+
+Printing HELLO...
+--------------------------------------------------------------------------
+|CNUM    |SECTION|STARTHOUR|ENDHOUR|DAYS |ROOM      |INSTRUCTOR          |
+--------------------------------------------------------------------------
+|CSCI241 |27935  |11:00    |11:50  |MWF  |AW403     |BOVER               |
+|CSCI305 |27950  |14:00    |14:50  |MTWF |AW403     |LIU                 |
+|CSCI330 |27974  |12:00    |12:50  |MTWF |CF314     |DENEKE              |
+|CSCI330 |27977  |14:00    |14:50  |MTWF |CF316     |DENEKE              |
+--------------------------------------------------------------------------
+
+Cannot overwrite base relation COURSE!
+
+Printing C1...
+-------------------------------------------------
+|CNUM    |TITLE                         |CREDITS|
+-------------------------------------------------
+|CSCI330 |DATABASE SYSTEMS              |4      |
+|CSCI345 |OBJECT ORIENTED DESIGN        |4      |
+-------------------------------------------------
+
+
+Printing J...
+----------------------------------------------------------
+|CNUM    |TITLE                         |CREDITS|PNUM    |
+----------------------------------------------------------
+|CSCI241 |DATA STRUCTURES               |4      |MATH124 |
+|CSCI241 |DATA STRUCTURES               |4      |CSCI145 |
+|CSCI301 |FORMAL LANGUAGES              |5      |CSCI145 |
+|CSCI305 |ALGORITHMS                    |4      |CSCI241 |
+|CSCI330 |DATABASE SYSTEMS              |4      |CSCI241 |
+----------------------------------------------------------
+
+Cannot DESTROY J: temporary relation.
+
+Printing T1...
+----------------------------------------------------------
+|CNUM    |TITLE                         |CREDITS|CNUM    |
+----------------------------------------------------------
+|CSCI241 |DATA STRUCTURES               |4      |CSCI305 |
+|CSCI241 |DATA STRUCTURES               |4      |CSCI330 |
+----------------------------------------------------------
+
+
+Printing T2...
+----------------------------------------------------------
+|CNUM    |TITLE                         |CREDITS|CNUM    |
+----------------------------------------------------------
+|CSCI241 |DATA STRUCTURES               |4      |CSCI305 |
+|CSCI241 |DATA STRUCTURES               |4      |CSCI330 |
+----------------------------------------------------------
+
+
+Printing T3...
+----------------------------------------
+|CREDITS|TITLE                         |
+----------------------------------------
+|4      |DATA STRUCTURES               |
+----------------------------------------
+
+
+Printing CATALOG...
+-------------------------------------------
+|RELATION                      |ATTRIBUTES|
+-------------------------------------------
+|COURSE                        |3         |
+|PREREQ                        |2         |
+|OFFERING                      |7         |
+|STAFF                         |5         |
+|DEPT                          |2         |
+|C                             |3         |
+|HELLO                         |7         |
+|J                             |4         |
+|T1                            |4         |
+|T2                            |4         |
+|T3                            |2         |
+|C1                            |3         |
+-------------------------------------------
+
+Cannot overwrite base relation C1!
+
+Printing C1...
+-------------------------------------------------
+|CNUM    |TITLE                         |CREDITS|
+-------------------------------------------------
+|CSCI999 |TOO GOOD FOR YA               |180    |
+-------------------------------------------------
+
+Relation FALSE does not exist; check input.
+
+Printing P1...
+----------------------------------------------------
+|CNUM    |INSTRUCTOR          |INSTRUCTOR          |
+----------------------------------------------------
+|CSCI141 |JAGODZINSKI         |JAGODZINSKI         |
+|CSCI241 |BOVER               |BOVER               |
+|CSCI330 |DENEKE              |DENEKE              |
+----------------------------------------------------
+
+Attribute STARTHOUR is not in the schema.
+
+Printing P1...
+--------------------
+|                  |
+--------------------
+--------------------
+
+
+Printing PTRUE1...
+----------------------------------------------
+|CNUM    |CNUM    |CNUM    |CNUM    |PNUM    |
+----------------------------------------------
+|CSCI141 |CSCI141 |CSCI141 |CSCI141 |MATH112 |
+|CSCI145 |CSCI145 |CSCI145 |CSCI145 |MATH115 |
+|CSCI145 |CSCI145 |CSCI145 |CSCI145 |CSCI141 |
+|CSCI241 |CSCI241 |CSCI241 |CSCI241 |MATH124 |
+|CSCI241 |CSCI241 |CSCI241 |CSCI241 |CSCI145 |
+|CSCI301 |CSCI301 |CSCI301 |CSCI301 |CSCI145 |
+|CSCI305 |CSCI305 |CSCI305 |CSCI305 |CSCI241 |
+|CSCI330 |CSCI330 |CSCI330 |CSCI330 |CSCI241 |
+----------------------------------------------
+
+Cannot DESTROY P: temporary relation.
+
+Printing CATALOG...
+-------------------------------------------
+|RELATION                      |ATTRIBUTES|
+-------------------------------------------
+|COURSE                        |3         |
+|PREREQ                        |2         |
+|OFFERING                      |7         |
+|STAFF                         |5         |
+|DEPT                          |2         |
+|C                             |3         |
+|HELLO                         |7         |
+|J                             |4         |
+|T1                            |4         |
+|T2                            |4         |
+|T3                            |2         |
+|C1                            |3         |
+|P                             |3         |
+|PTRUE1                        |5         |
+|P1                            |0         |
+-------------------------------------------
+
+
+Printing COURSE...
+-------------------------------------------------
+|CNUM    |TITLE                         |CREDITS|
+-------------------------------------------------
+|CSCI241 |DATA STRUCTURES               |4      |
+|CSCI301 |FORMAL LANGUAGES              |5      |
+|CSCI305 |ALGORITHMS                    |4      |
+|CSCI330 |DATABASE SYSTEMS              |4      |
+|CSCI345 |OBJECT ORIENTED DESIGN        |4      |
+-------------------------------------------------
+
+Relation DND doesn't exist.
+
+Printing COURSE...
+-------------------------------------------------
+|CNUM    |TITLE                         |CREDITS|
+-------------------------------------------------
+-------------------------------------------------
+
+
+Printing STAFF...
+------------------------------------------------------------
+|NAME                |SPOUSE    |RANK |CAMPUSADDR|EXTENSION|
+------------------------------------------------------------
+------------------------------------------------------------
+
+Relation DND doesn't exist within CATALOG.
+
+Printing PRACT...
+---------------------------
+|NAME                |DEPT|
+---------------------------
+|CENA                |REC |
+---------------------------
+
+
+Printing CATALOG...
+-------------------------------------------
+|RELATION                      |ATTRIBUTES|
+-------------------------------------------
+|COURSE                        |3         |
+|PREREQ                        |2         |
+|OFFERING                      |7         |
+|STAFF                         |5         |
+|DEPT                          |2         |
+|C                             |3         |
+|HELLO                         |7         |
+|J                             |4         |
+|T1                            |4         |
+|T2                            |4         |
+|T3                            |2         |
+|C1                            |3         |
+|P                             |3         |
+|PTRUE1                        |5         |
+|P1                            |0         |
+|PRACT                         |2         |
+-------------------------------------------
+
+
+Printing TEST...
+---------------------------
+|DEPT|NAME                |
+---------------------------
+|CSCI|LIU                 |
+|MUS |ANOTHER             |
+|MUS |MARTIN              |
+|MUS |ERIC                |
+|FIN |TWO                 |
+|FIN |THREE               |
+|FIN |MONEY               |
+|REC |CENA                |
+---------------------------
+
+
+Printing TEST2...
+------
+|DEPT|
+------
+|CSCI|
+|MUS |
+|FIN |
+|REC |
+------
