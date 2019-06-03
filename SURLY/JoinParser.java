@@ -6,7 +6,7 @@ File Name : JoinParser.java
 
 import java.util.*;
 
-public class JoinParser{
+public class JoinParser{ // handler for the JOIN command
 	private String relationAName;
 	private String relationBName;
 	private String relationTempName;
@@ -16,7 +16,7 @@ public class JoinParser{
 	private Parser p;
 	private JoinCondition join;
 
-	JoinParser(Parser p){
+	JoinParser(Parser p){ // constructor
 		this.p = p;
 		relationAName = new String();
 		relationBName = new String();
@@ -27,17 +27,16 @@ public class JoinParser{
 		addInfo();
 	}
 
-	public void setRelationA(Relation A){ join.setRelA(A); }
+	public void setRelationA(Relation A) { join.setRelA(A); }
+	public void setRelationB(Relation B) { join.setRelB(B); }
 
-	public void setRelationB(Relation B){ join.setRelB(B); }
-	
 	public void getComparison(){
 		join.compare();
 		r = join.getJoinedRel();
 		r.setName(relationTempName);
 	}
 
-	private int hasOn(LinkedList<String> info){
+	private int hasOn(LinkedList<String> info){ // checks that there is indeed a join condition.
 		int i = 0;
 		while(i != info.size() && !info.get(i).equals("ON")){
 			i++;
@@ -49,7 +48,7 @@ public class JoinParser{
 		return i;
 	}
 
-	private void addInfo(){
+	private void addInfo(){ // based on what the JoinCondition returns
 		LinkedList<String> content = p.parseCommandSet();
 		relationTempName = content.get(0);
 		int onPtr = hasOn(content);
@@ -59,12 +58,10 @@ public class JoinParser{
 			join.setLeft(content.get(onPtr + 1));
 			join.setEquivalence(content.get(onPtr + 2));
 			join.setRight(content.get(onPtr + 3));
-			
 		}
-
 	}
 
-	public boolean isValid(){ 
+	public boolean isValid(){
 		if(validStatement){
 			validStatement = join.validEquivalence();
 		}
@@ -75,5 +72,6 @@ public class JoinParser{
 	public String getRelationAName(){ return relationAName; }
 	public String getRelationBName(){ return relationBName; }
 	public Relation getTempRelation(){ return r; }
-
 }
+
+// ### END ###

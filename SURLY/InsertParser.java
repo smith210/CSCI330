@@ -6,7 +6,7 @@ File Name : InsertParser.java
 
 import java.util.*;
 
-public class InsertParser{
+public class InsertParser{ // modified from SURLY1, primarily with printing conventiond
 	private String name;
 	private int attrNum;
 	private Relation relation;
@@ -55,8 +55,7 @@ public class InsertParser{
 		}
 	}
 
-	private boolean validType(AttributeValue a, String curr){
-
+	private boolean validType(AttributeValue a, String curr){ // typically error handling of valids, if it matches the already established schema
 		if(curr.equals("NUM")){
 			try{
 				Integer.parseInt(a.parseAttName());
@@ -65,19 +64,14 @@ public class InsertParser{
 			}
 		}
 		return true;
-
-		
 	}
 
-	private boolean validSize(AttributeValue a, int curr){
-
+	private boolean validSize(AttributeValue a, int curr){ // typically error handling of valids, if it matches the already established schema
 		if(curr < a.parseAttName().length()){
 			return false;
 		}else{
 			return true;
 		}
-
-
 	}
 
 	public boolean isValid(Relation r){
@@ -93,7 +87,7 @@ public class InsertParser{
 				}
 				count++;
 			}
-		
+
 			if(count != tuple.parseTupleValues().size()){
 				return false;
 			}else{
@@ -116,3 +110,5 @@ public class InsertParser{
 		return this.attrNum;
 	}
 }
+
+// ### END ###

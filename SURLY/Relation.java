@@ -4,16 +4,15 @@ CSCI 330 - Spring 2019
 File Name : Relation.java
 */
 
-
 import java.util.*;
 
-public class Relation{
+public class Relation{ // from SURLY1, modified primarily to fix the ugly PRINT code we had in SURLY1.
 	private String name;
 	private LinkedList<Attribute> schema;
 	private LinkedList<Tuple> tuples;
 	private boolean isTemp;
 
-	Relation(){
+	Relation(){ // constructor
 		this.name = "";
 		this.schema = new LinkedList<Attribute>();
 		this.tuples = new LinkedList<Tuple>();
@@ -32,14 +31,13 @@ public class Relation{
 		tuples.add(tuple);
 	}
 
-	public void deleteAllTuples(){
+	public int tupleSize(){ return tuples.size(); }
+
+	public void deleteAllTuples(){ // get rid of them all, for single cases
 		tuples = new LinkedList<Tuple>();
 	}
 
-
-	public int tupleSize(){ return tuples.size(); }
-
-	public void deleteTuples(LinkedList<Tuple> deletes){
+	public void deleteTuples(LinkedList<Tuple> deletes){ // get rid of few, for WHERE cases
 		for(int i = 0; i < deletes.size(); i++){
 			Tuple deleteTup = deletes.get(i);
 			if(tuples.contains(deleteTup)){
@@ -48,7 +46,7 @@ public class Relation{
 		}
 	}
 
-	public void deleteTuple(String name){
+	public void deleteTuple(String name){ // for the DESTROY relation case, and for overwriting single relations.
 		int tupleIndex = 0;
 		int attributeIndex = 0;
 		boolean isFound = false;
@@ -74,8 +72,9 @@ public class Relation{
 			System.exit(0);
 		}
 	}
+  // The functions below are soley for aesthetics with printing in the terminal.
 
-	private int getWidth(Attribute att){
+	private int getWidth(Attribute att){ // is the attribute name longer than any values? Increase the distance between pipes in the tables.
 		if(att.parseAttributeLength() < att.parseAttributeName().length()){
 			return att.parseAttributeName().length();
 		}else{
@@ -83,7 +82,7 @@ public class Relation{
 		}
 	}
 
-	private int tableWidth(){
+	private int tableWidth(){ // determine how big to make the tables.
 		int width = 0;
 		for(int i = 0; i < schema.size(); i++){
 			width = width + getWidth(schema.get(i));
@@ -91,20 +90,19 @@ public class Relation{
 		return width + schema.size() + 1;
 	}
 
-	private void printSpaces(int spaces){
+	private void printSpaces(int spaces){ // simply prints some spaces, made a function to clean up arguments.
 		for(int i = 0; i < spaces; i ++){
 			System.out.print(" ");
 		}
 	}
 
-	private void displaySchema(Attribute curr){
+	private void displaySchema(Attribute curr){ // build a column line and immediately print the corresponding attribute name (SCHEMA ONLY)
 		System.out.print("|");
 		System.out.print(curr.parseAttributeName());
 		printSpaces(curr.parseAttributeLength() - curr.parseAttributeName().length());
-
 	}
 
-	private void displayTuple(Tuple curr){
+	private void displayTuple(Tuple curr){ // build a column line and immediately print the corresponding attribute name (TUPLES ONLY)
 		LinkedList<AttributeValue> info = curr.parseTupleValues();
 		System.out.print("|");
 		for(int i = 0; i < info.size(); i++){
@@ -113,23 +111,20 @@ public class Relation{
 			printSpaces(max - info.get(i).parseAttName().length());
 			System.out.print("|");
 		}
-
 	}
 
-	private void createBorder(){
+	private void createBorder(){ // creates border around table
 		for(int dash = 0; dash < tableWidth(); dash++){
 			System.out.print("-");
 		}
-		if(tableWidth() == 1){
+		if(tableWidth() == 1){ // for empty relations
 			System.out.print("-------------------");
 		}
 		System.out.println(" ");
 	}
 
-
-	public void display(){
+	public void display(){ // the primary called function from around the Java folder to print everything nicely
 		createBorder();
-
 		for(int currSch = 0; currSch < schema.size(); currSch++){
 			displaySchema(schema.get(currSch));
 		}
@@ -147,14 +142,9 @@ public class Relation{
 			System.out.println(" ");
 		}
 		createBorder();
-
-
 	}
 
-	public boolean getTemp(){ return isTemp; }
-	public void tempBuff(){ isTemp = true; }
-
-	public int inSchema(String attName){
+	public int inSchema(String attName){ // a check function for how many attribute titles are in a desired schema
 		int i = 0;
 		while(i != schema.size() && !schema.get(i).parseAttributeName().equals(attName)){
 			i++;
@@ -165,6 +155,10 @@ public class Relation{
 			return i;
 		}
 	}
+
+	public boolean getTemp(){ return isTemp; } // gets from the constructor the status of temp (is it a temporary relation?)
+
+	public void tempBuff(){ isTemp = true; }
 
 	public String parseRelationName(){
 		return this.name;
@@ -178,3 +172,5 @@ public class Relation{
 		return this.tuples;
 	}
 }
+
+// ### END ###

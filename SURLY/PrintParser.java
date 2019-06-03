@@ -5,7 +5,7 @@ File Name : PrintParser.java
 */
 import java.util.*;
 
-public class PrintParser{
+public class PrintParser{ // mostly unmodified from SURLY1
 	private String[] information;
 
 	PrintParser(Parser p){
@@ -28,7 +28,7 @@ public class PrintParser{
 		int attrVar = 0;
 		boolean nameSet = false;
 
-		
+
 		LinkedList<String> commands = p.parseCommandSet();
 		for(int i = 1; i < commands.size(); i++){
 			String currCommand = commands.get(i);
@@ -51,3 +51,5 @@ public class PrintParser{
 		return this.information;
 	}
 }
+
+// ### END ###

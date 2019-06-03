@@ -4,7 +4,7 @@ CSCI 330 - Spring 2019
 File Name : Attribute.java
 */
 
-public class Attribute{
+public class Attribute{ // UML from previous SURLY
 	private String name;
 	private String dataType;
 	private int length;
@@ -33,3 +33,5 @@ public class Attribute{
 		return this.length;
 	}
 }
+
+// ### END ###

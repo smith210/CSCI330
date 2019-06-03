@@ -4,8 +4,7 @@ CSCI 330 - Spring 2019
 File Name : AttributeValue.java
 */
 
-
-public class AttributeValue{
+public class AttributeValue{ // UML from previous SURLY
 	private String name;
 	private String value;
 
@@ -24,6 +23,6 @@ public class AttributeValue{
 	public String parseAttValue(){
 		return this.value;
 	}
-
-
 }
+
+// ### END ###

@@ -6,14 +6,14 @@ File Name : Parser.java
 
 import java.util.*;
 
-public class Parser{
+public class Parser{ // does all of the file processing.
 	private LinkedList<String> commandSet;
 
 	Parser(){
 		commandSet = new LinkedList<String>();
 	}
 
-	Parser(String command){
+	Parser(String command){ // two constructions
 		commandSet = new LinkedList<String>();
 		String str = "";
 		int index = 0;
@@ -24,11 +24,11 @@ public class Parser{
 		}
 	}
 
-	private void breakCharState(String command, int index){
+	private void breakCharState(String command, int index){ // makes sure operators with more than one character (like <=) are dealt with.
 			char curr = command.charAt(index);
 			if(curr != ' ' && curr != '\''){
 				if(curr == '!' && command.charAt(index+1) == '=' || curr == '>' && command.charAt(index+1) == '=' || curr == '<' && command.charAt(index+1) == '='){
-					
+
 					String equivalence = Character.toString(curr);
 					equivalence = equivalence.concat("=");
 					commandSet.add(equivalence);
@@ -40,7 +40,6 @@ public class Parser{
 					}
 				}
 			}
-
 		if(isBreak(command.charAt(index+1))){
 			breakCharState(command, index+1);
 		}else{
@@ -52,7 +51,7 @@ public class Parser{
 		}
 	}
 
-	private void symbolState(String command, String str, int index, boolean inQuote){
+	private void symbolState(String command, String str, int index, boolean inQuote){ // tosses between breakCharState and itself, depending on the character list from below
 		if(str.isEmpty()){
 			str = Character.toString(command.charAt(index));
 		}else{
@@ -76,14 +75,14 @@ public class Parser{
 		return;
 	}
 
-	public void printContent(){
+	public void printContent(){ // for debugging purposes, make sure Parser is getting the right values.
 		for(int i = 0; i < commandSet.size(); i++){
 			System.out.println(commandSet.get(i));
 		}
 	}
 
-	public boolean hasCatalog(){
-		boolean catalogPresent = false;		
+	public boolean hasCatalog(){ // is CATALOG in the line? CATALOG has special qualities as a relation, so it is a necessary boolean.
+		boolean catalogPresent = false;
 		for(int i = 0; i < commandSet.size(); i++){
 			String curr = commandSet.get(i);
 			if(curr.equals("CATALOG")){
@@ -92,8 +91,8 @@ public class Parser{
 		}
 		return catalogPresent;
 	}
-	
-	public boolean hasWhere(){
+
+	public boolean hasWhere(){ // imperative boolean check if WHERE exists.
 		boolean hasWhere = false;
 		for(int i = 0; i < commandSet.size(); i++){
 			if(commandSet.get(i).equals("WHERE")){
@@ -107,15 +106,15 @@ public class Parser{
 		return commandSet.get(1).equals("=");
 	}
 
-	public String getSecondaryName(){
+	public String getSecondaryName(){ // basically, any command from SURLY2. A command that isn't the first word of a line.
 		return commandSet.get(2);
 	}
 
-	public String getRelationName(){
+	public String getRelationName(){ // getter
 		return commandSet.get(0);
 	}
 
-	private boolean isBreak(char c){
+	private boolean isBreak(char c){ // list of special characters for our purposes, mostly from SURLY0.
 		switch(c){
 			case '\'':
 			case ' ':
@@ -137,7 +136,6 @@ public class Parser{
 	public LinkedList<String> parseCommandSet(){
 		return this.commandSet;
 	}
-
-
-
 }
+
+// ### END ###

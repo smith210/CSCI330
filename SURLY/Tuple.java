@@ -6,10 +6,10 @@ File Name : Tuple.java
 
 import java.util.*;
 
-public class Tuple{
+public class Tuple{ // kept from SURLY1
 	private LinkedList<AttributeValue> values;
 
-	Tuple(){
+	Tuple(){ // constructor
 		values = new LinkedList<AttributeValue>();
 	}
 
@@ -17,22 +17,22 @@ public class Tuple{
 		this.values = values;
 	}
 
+	public LinkedList<AttributeValue> parseTupleValues(){
+		return this.values;
+	}
+
 	public void add(AttributeValue value){
 		values.add(value);
 	}
 
-	public Tuple getTuple(int index) {
+	public Tuple getTuple(int index) { // created solely for ProjectParser to hand-build tuples by the attribute!
 		Tuple neww = new Tuple();
 		neww.add(values.get(index));
 		return neww;
 	}
 
-	public AttributeValue getAttVal(int index) {
+	public AttributeValue getAttVal(int index) { // created solely for ProjectParser to hand-build tuples by the attribute!
 		return values.get(index);
-	}
-
-	public LinkedList<AttributeValue> parseTupleValues(){
-		return this.values;
 	}
 
 	public String getValue(String attributeName){
@@ -45,17 +45,17 @@ public class Tuple{
 			if(currName.equals(attributeName)){
 				retVal = attributeName;
 			}
-
 			pointer++;
 		}
 		return retVal;
 	}
 
-	public void display(){
+	public void display(){ // a debugging function to show, per line, each entry in the tuples.
 		for(int i = 0; i < values.size(); i++){
 			AttributeValue a = values.get(i);
 			System.out.println(a.parseAttName());
 		}
-
 	}
 }
+
+// ### END ###

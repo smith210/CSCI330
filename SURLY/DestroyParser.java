@@ -4,12 +4,11 @@ CSCI 330 - Spring 2019
 File Name : DestroyParser.java
 */
 
-
 import java.util.*;
 
-public class DestroyParser {
+public class DestroyParser { // UML from previous SURLY
   	private String relation;
-	
+
 	DestroyParser(Parser p){
 		getInfo(p);
 	}
@@ -33,3 +32,5 @@ public class DestroyParser {
 		return this.relation;
 	}
 }
+
+// ### END ###
