@@ -11,44 +11,44 @@ public class SurlyDatabase{
 
 	SurlyDatabase(){
 		relations = new LinkedList<Relation>();
+		//create the CATALOG
 		Relation catalog = new Relation();
-
-		// create independent CATALOG
 		LinkedList<Attribute> catalogSchema = new LinkedList<Attribute>();
 		LinkedList<Tuple> catalogTuples = new LinkedList<Tuple>();
 		Attribute catalogAttr1 = new Attribute();
 		Attribute catalogAttr2 = new Attribute();
-		catalog.setName("CATALOG");
+		catalog.setName("CATALOG");                  // sets up catalog manually to avoid being operated like a normal relation
 		catalogAttr1.setAttributeName("RELATION");
 		catalogAttr1.setDataType("CHAR");
+		catalogAttr1.setLength(30);
 		catalogAttr2.setAttributeName("ATTRIBUTES");
 		catalogAttr2.setDataType("NUM");
 		catalogSchema.add(catalogAttr1);
 		catalogSchema.add(catalogAttr2);
 		catalog.setSchema(catalogSchema);
-		relations.add(catalog);
+		relations.add(catalog);//add CATALOG
 	}
 
 	public Relation getRelation(String name){
 		Relation r = relations.getFirst();
 		int index = 1;
+
 		try{
 			while(!(r.parseRelationName()).equals(name)){
 				r = relations.get(index);
 				index++;
 			}
-		}
-		catch(Exception e){
+		}catch(Exception e){ // checks if the relation exists already
 				r = new Relation();
 		}
 		return r;
 	}
 
-	public void destroyRelation(String name){
-		if(!name.equals("CATALOG") && !getRelation(name).parseRelationName().isEmpty()){
+	public void destroyRelation(String name){ // for the DESTROY case - CATALOG is immune.
+		if(!name.equals("CATALOG") && !getRelation(name).parseRelationName().isEmpty()){//can't destroy CATALOG
 			relations.remove(getRelation(name));
 			Relation catalog = getRelation("CATALOG");
-			catalog.deleteSingleTuple(name);
+			catalog.deleteTuple(name); //delete the destroyed relation from the CATALOG
 		}
 		else {
 			System.out.println("Cannot destroy " + name + "!");
@@ -58,5 +58,6 @@ public class SurlyDatabase{
 	public void add(Relation relation){
 		relations.add(relation);
 	}
-
 }
+
+// ### END ###

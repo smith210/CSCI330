@@ -6,20 +6,28 @@ File Name : InsertParser.java
 
 import java.util.*;
 
-public class InsertParser{
+public class InsertParser{ // modified from SURLY1, primarily with printing conventiond
 	private String name;
 	private int attrNum;
 	private Relation relation;
 	private Tuple tuple;
 
+	InsertParser(Parser p){
+		addInfo(p);
+	}
+
 	InsertParser(String command){
+		Parser p = new Parser(command);
+		addInfo(p);
+	}
+
+	private void addInfo(Parser p){
 		Tuple t = new Tuple();
 		int attrVar = 0;
 		boolean nameSet = false;
 
-		Parser p = new Parser(command);
 		LinkedList<String> commands = p.parseCommandSet();
-		for(int i = 0; i < commands.size(); i++){
+		for(int i = 1; i < commands.size(); i++){
 			AttributeValue value = new AttributeValue();
 			String currCommand = commands.get(i);
 
@@ -39,6 +47,57 @@ public class InsertParser{
 		attrNum = attrVar;
 	}
 
+	public boolean hasValidAttNum(int attLimit){
+		if(attrNum == attLimit){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	private boolean validType(AttributeValue a, String curr){ // typically error handling of valids, if it matches the already established schema
+		if(curr.equals("NUM")){
+			try{
+				Integer.parseInt(a.parseAttName());
+			}catch(Exception e){
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private boolean validSize(AttributeValue a, int curr){ // typically error handling of valids, if it matches the already established schema
+		if(curr < a.parseAttName().length()){
+			return false;
+		}else{
+			return true;
+		}
+	}
+
+	public boolean isValid(Relation r){
+		LinkedList<Attribute> schema = r.parseRelationSchema();
+		if(!r.getTemp()){
+			int count = 0;
+			for(int i = 0; i < tuple.parseTupleValues().size(); i++){
+				AttributeValue a = tuple.parseTupleValues().get(i);
+				Attribute curr = schema.get(i);
+				if(validType(a, curr.parseAttributeType()) && validSize(a, curr.parseAttributeLength())){//don't do anything
+				}else{
+					break;
+				}
+				count++;
+			}
+
+			if(count != tuple.parseTupleValues().size()){
+				return false;
+			}else{
+				return true;
+			}
+		}else{
+			return false;
+		}
+	}
+
 	public Tuple parseTuple(){
 		return tuple;
 	}
@@ -51,3 +110,5 @@ public class InsertParser{
 		return this.attrNum;
 	}
 }
+
+// ### END ###
