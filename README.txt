@@ -1,4 +1,4 @@
-Installation: Download entire directory located in the SURLY2 folder.
+Installation: Download entire directory located in the SURLY folder.
 
 Run Instructions: execute the Main.java program with one argument - a testfile of your choice formatted like SQL, similar to below:
 
